@@ -8,6 +8,8 @@
 
 ## 사용한 라이브러리
 ```
+    "@react-navigation/bottom-tabs": "^6.5.7"
+    "@react-navigation/native-stack": "^6.9.12"
     "expo": "~48.0.18"
     "expo-status-bar": "~1.4.4"
     "prop-types": "^15.8.1"
