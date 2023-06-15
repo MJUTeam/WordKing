@@ -21,7 +21,7 @@ const CreateWordScreen = () => {
 };
 
 function addWord( korean, english ){
-  AsyncStorage.setItem( english, JSON.stringify( { 'id': english,  'korean': korean, 'english': english, 'bookshelf': 0 } ) );
+  AsyncStorage.setItem( english, JSON.stringify( { 'id': english,  'korean': korean, 'english': english, 'bookshelf': 0, 'marking': false } ) );
   console.log( "IN" );
 } 
 
