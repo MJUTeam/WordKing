@@ -18,10 +18,7 @@
     "prop-types": "^15.8.1",
     "react": "18.2.0",
     "react-native": "0.71.8",
-    "react-native-calendars": "^1.1298.0",
-    "react-native-filereader": "^1.0.6",
-    "react-native-fs": "^2.20.0",
-    "styled-components": "^6.0.0-rc.3"
+    "react-native-calendars": "^1.1298.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
