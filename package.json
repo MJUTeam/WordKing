@@ -9,17 +9,25 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "1.17.11",
     "@react-navigation/bottom-tabs": "^6.5.7",
+    "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
-    "expo": "~48.0.18",
+    "expo": "^46.0.21",
     "expo-status-bar": "~1.4.4",
     "prop-types": "^15.8.1",
     "react": "18.2.0",
     "react-native": "0.71.8",
-    "react-native-calendars": "^1.1298.0"
+    "react-native-calendars": "^1.1298.0",
+    "react-native-filereader": "^1.0.6",
+    "react-native-fs": "^2.20.0",
+    "styled-components": "^6.0.0-rc.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
   },
-  "private": true
+  "private": true,
+  "description": "2023 1학기 모바일 프로그래밍 프로젝트(영단어 애플리케이션)",
+  "author": "",
+  "license": "ISC"
 }
