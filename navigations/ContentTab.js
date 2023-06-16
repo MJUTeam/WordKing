@@ -7,6 +7,8 @@ import SettingScreen from '../screens/SettingScreen';
 import { ContentRoutes } from './routes';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GRAY, PRIMARY } from '../colors';
+import WordQuizScreen from '../screens/WordQuizScreen';
+import QuizStack from './QuizStack';
 const Tab = createBottomTabNavigator();
 
 const getTabBarIcon = ({ focused, color, size, name }) => {
@@ -41,8 +43,8 @@ const ContentTab = () => {
         }}
       />
       <Tab.Screen
-        name={ContentRoutes.Quiz.name}
-        component={QuizScreen}
+        name={ContentRoutes.QuizStack.name}
+        component={QuizStack}
         options={{
           tabBarIcon: (props) => getTabBarIcon({ ...props, name: 'chat-question' }),
           tabBarLabel: ContentRoutes.Quiz.label,
