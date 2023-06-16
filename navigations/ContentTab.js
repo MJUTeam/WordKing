@@ -43,7 +43,7 @@ const ContentTab = () => {
         }}
       />
       <Tab.Screen
-        name={ContentRoutes.Quiz.name}
+        name={ContentRoutes.QuizStack.name}
         component={QuizStack}
         options={{
           tabBarIcon: (props) => getTabBarIcon({ ...props, name: 'chat-question' }),
