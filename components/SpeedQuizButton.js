@@ -1,5 +1,6 @@
 import {Pressable, StyleSheet,Text} from 'react-native';
 import PropTypes from 'prop-types';
+import { GRAY, Orange} from '../colors';
 
 const SpeedQuizButton = ({ title, onPress, buttonStyle,buttonTypes }) =>{
     return (
@@ -7,11 +8,11 @@ const SpeedQuizButton = ({ title, onPress, buttonStyle,buttonTypes }) =>{
         style={({pressed})=>[
             styles.button,{
                 backgroundColor:
-                    buttonTypes===ButtonTypes.NUMBER?'#3f3f46':'#f59e0b',
+                    buttonTypes===ButtonTypes.NUMBER?GRAY.DEFAULT:Orange.DEFAULT,
             },
             pressed && {
                 backgroundColor:
-                buttonTypes===ButtonTypes.NUMBER?'black':'#b45309',},
+                buttonTypes===ButtonTypes.NUMBER?GRAY.DARK:Orange.DARK,},
             buttonStyle,
         ]}
         onPressOut={onPress}
