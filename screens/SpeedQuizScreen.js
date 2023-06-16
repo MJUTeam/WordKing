@@ -2,13 +2,13 @@ import { StyleSheet, Text, useWindowDimensions, View, Alert } from 'react-native
 import SpeedQuizButton,{ ButtonTypes } from '../components/SpeedQuizButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Timer from '../components/Timer';
-import { useState } from 'react';
+import { useEffect,useState } from 'react';
 
 const SpeedQuizScreen = ({ navigation }) => {
 
   const [result,setResult] = useState("");
-  const [spelling,setSpelling] = useState("test");
-  const [meaning,setMeaning] = useState("테스트");
+  const [spelling,setSpelling] = useState("");
+  const [meaning,setMeaning] = useState("");
   const [point,setPoint] = useState(0);
   
   const windowWidth = useWindowDimensions().width;
@@ -17,28 +17,37 @@ const SpeedQuizScreen = ({ navigation }) => {
   const letters = spelling.split("");
   const maxLength = letters.length - 1;
 
-  
-  const getStoredDataCount = async () => {
+  const initWord = async () => {
     try {
       const keys = await AsyncStorage.getAllKeys();
       const randomKey = keys[Math.floor(Math.random() * keys.length)];
-      getWord(randomKey);
+      const value = await AsyncStorage.getItem(randomKey);
+      const info = JSON.parse(value);
+      setSpelling(info.english);
+      setMeaning(info.korean);
     } catch (error) {
       console.log(error);
-
     }
   };
+  
+  useEffect(() => {initWord(); }, []);
 
-  function getWord(ID){
-    AsyncStorage.getItem(ID)
-        .then(value => {
-          const info = JSON.parse(value);
-          setMeaning((mean)=>{ return info.korean;});
-          setSpelling((spelling)=>{ return info.english;});
-          return info;
-        })
-        .catch(error => console.log(error));
-  }
+  const getWord = async () => {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      const randomKey = keys[Math.floor(Math.random() * keys.length)];
+      AsyncStorage.getItem(randomKey)
+      .then(value => {
+        const info = JSON.parse(value);
+        setMeaning((mean)=>{ return info.korean;});
+        setSpelling((spelling)=>{ return info.english;});
+        return info;
+      })
+      .catch(error => console.log(error));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 
   function shuffleArray(array) {
@@ -52,8 +61,6 @@ const SpeedQuizScreen = ({ navigation }) => {
     return shuffledArray;
   }
 
-
-
   const handleTimeUp = () => {
     Alert.alert(
       '결과',
@@ -63,7 +70,6 @@ const SpeedQuizScreen = ({ navigation }) => {
       { cancelable: false }
     );
   };
-
 
 return (
   <View style={styles.container} >
@@ -111,12 +117,10 @@ return (
         <SpeedQuizButton title="정답"
           onPress={()=>{
             if(result===spelling){
-              getStoredDataCount()
+              getWord()
               setPoint((point)=>{ return point+10;});
             }
-            
-            setResult((result)=>{ return "";});
-            
+            setResult((result)=>{ return "";});           
         }}
             buttonTypes={ButtonTypes.OPERATOR}
             buttonStyle={{width,height:width, marginBottom:1}}
