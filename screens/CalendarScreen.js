@@ -9,7 +9,7 @@ import WeekCalendarList from '../components/WeekCalendarList';
 import { getAllItemsByDate } from '../utils/ItemStorage';
 import { dateToString } from '../utils/UtilFunc';
 
-const CalenderScreen = () => {
+const CalendarScreen = ({ navigation }) => {
   const [isMonth, setIsMonth] = useState(true);
   const [selected, setSelected] = useState(dateToString(new Date()));
   const [words, setWords] = useState([]);
@@ -36,7 +36,7 @@ const CalenderScreen = () => {
         />
       </View>
       <HR styles={{ line: { borderBottomColor: GRAY.LIGHT } }} />
-      <WordList words={words} />
+      <WordList words={words} navigation={navigation} />
     </View>
   );
 };
@@ -51,4 +51,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CalenderScreen;
+export default CalendarScreen;

@@ -27,3 +27,7 @@ export const getAllItemsByDate = async (date) => {
   }
   return items;
 };
+
+export const setItem = async (word) => {
+  AsyncStorage.setItem(word.id, JSON.stringify(word));
+};

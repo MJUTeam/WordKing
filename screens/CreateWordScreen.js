@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
 import React, { useState } from 'react';
 import { dateToString } from '../utils/UtilFunc';
+import { Marking } from '../components/Marking';
 
 const CreateWordScreen = () => {
   const [wordEnglish, onChangeEnglish] = useState('INPUT ENG');
@@ -26,7 +27,7 @@ function addWord(korean, english) {
       korean: korean,
       english: english,
       bookshelf: 0,
-      marking: 'NONE',
+      marking: Marking.NONE.toString(),
       date: dateToString(new Date()),
     })
   );
