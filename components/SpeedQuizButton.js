@@ -1,12 +1,7 @@
 import {Pressable, StyleSheet,Text} from 'react-native';
 import PropTypes from 'prop-types';
 
-const ButtonTypes ={
-    NUMBER:"NUMBER",
-    OPERATOR:"OPERATOR",
-}
-
-const Button = ({ title, onPress, buttonStyle,buttonTypes }) =>{
+const SpeedQuizButton = ({ title, onPress, buttonStyle,buttonTypes }) =>{
     return (
         <Pressable
         style={({pressed})=>[
@@ -26,11 +21,16 @@ const Button = ({ title, onPress, buttonStyle,buttonTypes }) =>{
     );
 };
 
-Button.defaultProps = {
+const ButtonTypes ={
+    NUMBER:"NUMBER",
+    OPERATOR:"OPERATOR",
+}
+
+SpeedQuizButton.defaultProps = {
     buttonTypes:ButtonTypes.NUMBER,
 }
 
-Button.propTypes = {
+SpeedQuizButton.propTypes = {
     title: PropTypes.string.isRequired,
     onPress:PropTypes.func.isRequired,
     buttonStyle:PropTypes.object,
@@ -50,5 +50,5 @@ const styles = StyleSheet.create({
     },
 })
 
-export {ButtonTypes};
-export default Button;
+export { ButtonTypes};
+export default SpeedQuizButton;

@@ -1,15 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, useWindowDimensions, View, Alert } from 'react-native';
-import Button,{ ButtonTypes } from './components/SpeedQuizButton';
-import Timer from './components/Timer';
+import SpeedQuizButton,{ ButtonTypes } from '../components/SpeedQuizButton';
+import Timer from '../components/Timer';
 import { useState } from 'react';
 
-const SpeedQuizScreen = () => {
+const SpeedQuizScreen = ({ navigation }) => {
   const [result,setResult] = useState("");
   const [spelling,setSpelling] = useState("testing");
   const [meaning,setMeaning] = useState("테스트");
   const [point,setPoint] = useState(0);
-
 
   const windowWidth = useWindowDimensions().width;
   const width = (windowWidth-5)/4;
@@ -46,7 +44,6 @@ const SpeedQuizScreen = () => {
 
 return (
   <View style={styles.container} >
-    <StatusBar style="auto"/>
     <View style={styles.pointContainer}>
       <Text style = { styles.text } >점수 : {point}</Text>
       <Timer timeLimit={60} onTimeUp={handleTimeUp} />
@@ -56,8 +53,9 @@ return (
     <Text style={ styles.goal }>{meaning} </Text>
     <Text style = {styles.problem} > 문제 </Text>
     </View>
-
+  
     <View style={styles.resultContainer}>
+      <SpeedQuizButton title={'뒤로가기'} onPress={() => navigation.goBack()} />
       <Text style = { styles.text } > {result} </Text>
     </View>
 
@@ -66,7 +64,7 @@ return (
         
         <View style={styles.number}>
           {shuffleArray(letters.slice(0, maxLength + 1)).map((alpha, index) =>(          
-            <Button 
+            <SpeedQuizButton 
             key={alpha+index}
             title={alpha.toString()}
             onPress={()=>{setResult((result)=>{ return result+alpha;});}}
@@ -80,14 +78,14 @@ return (
         </View>
       </View>
       <View>
-        <Button title="삭제"
+        <SpeedQuizButton title="삭제"
         onPress={()=>{
           setResult((result)=>{ return "";});
         }}
         buttonStyle={{width,height:width, marginTop:1}}
         buttonTypes={ButtonTypes.OPERATOR}
         />   
-        <Button title="정답"
+        <SpeedQuizButton title="정답"
           onPress={()=>{
             if(result===spelling){
               setSpelling((spelling)=> {return nextWord();});
