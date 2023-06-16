@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 
-const Timer = ({ timeLimit }) => {
+const Timer = ({ timeLimit , onTimeUp}) => {
   const [remainingTime, setRemainingTime] = useState(timeLimit);
-  const progress = (remainingTime / timeLimit) * 100; // 게이지 바의 진행 상태를 계산
+  const progress = (remainingTime / timeLimit) * 100;
 
   useEffect(() => {
     if (remainingTime > 0) {
@@ -14,6 +14,8 @@ const Timer = ({ timeLimit }) => {
       return () => {
         clearTimeout(timer);
       };
+    }else{
+      onTimeUp();
     }
   }, [remainingTime]);
 
