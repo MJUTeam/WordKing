@@ -25,6 +25,7 @@ const SpeedQuizScreen = ({ navigation }) => {
       getWord(randomKey);
     } catch (error) {
       console.log(error);
+
     }
   };
 
