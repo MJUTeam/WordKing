@@ -56,6 +56,7 @@ const ContentTab = () => {
         options={{
           tabBarIcon: (props) => getTabBarIcon({ ...props, name: 'calendar' }),
           tabBarLabel: ContentRoutes.Calender.label,
+          unmountOnBlur: true,
         }}
       />
       <Tab.Screen

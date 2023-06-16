@@ -2,18 +2,25 @@ import { StyleSheet, View, Text } from 'react-native';
 import { GRAY, WHITE } from '../colors';
 import MonthCalendarList from '../components/MonthCalendarList';
 import WordList from '../components/WordList';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import HR from '../components/HR';
 import IconButton from '../components/IconButton';
 import WeekCalendarList from '../components/WeekCalendarList';
-
-const today = new Date();
+import { getAllItemsByDate } from '../utils/ItemStorage';
+import { dateToString } from '../utils/UtilFunc';
 
 const CalenderScreen = () => {
   const [isMonth, setIsMonth] = useState(true);
-  const [selected, setSelected] = useState(
-    today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
-  );
+  const [selected, setSelected] = useState(dateToString(new Date()));
+  const [words, setWords] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const items = await getAllItemsByDate(selected);
+      setWords(items);
+      console.log('render');
+    })();
+  }, [selected, isMonth]);
 
   return (
     <View style={styles.container}>
@@ -29,7 +36,7 @@ const CalenderScreen = () => {
         />
       </View>
       <HR styles={{ line: { borderBottomColor: GRAY.LIGHT } }} />
-      <WordList />
+      <WordList words={words} />
     </View>
   );
 };
