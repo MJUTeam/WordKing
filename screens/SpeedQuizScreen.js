@@ -22,10 +22,9 @@ const SpeedQuizScreen = ({ navigation }) => {
     try {
       const keys = await AsyncStorage.getAllKeys();
       const randomKey = keys[Math.floor(Math.random() * keys.length)];
-      return getWord(randomKey);
+      getWord(randomKey);
     } catch (error) {
       console.log(error);
-      return 0;
     }
   };
 
