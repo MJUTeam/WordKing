@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList, View, Text, Pressable, StyleSheet } from 'react-native';
 import { GRAY, PRIMARY } from '../colors';
 import { ContentRoutes } from '../navigations/routes';
@@ -6,9 +6,19 @@ import IconButton from './IconButton';
 import { getColor, nextMarking } from './Marking';
 import { setItem } from '../utils/ItemStorage';
 import Toast from 'react-native-simple-toast';
+import { useIsFocused } from '@react-navigation/native';
 
 const Word = ({ word, onPress }) => {
   const [marking, setMarking] = useState('');
+  const [renderScreen, setRenderScreen] = useState(0);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      setRenderScreen((pre) => pre + 1);
+    }
+  }, [isFocused]);
+
   return (
     <Pressable onPress={onPress} style={styles.word}>
       <View style={styles.header}>
