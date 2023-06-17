@@ -1,13 +1,13 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import ContentTab from './ContentTab';
+import LoginStack from './LoginStack';
 
-const Navigation = () => {
+const LoginNavigation = () => {
   return (
     <NavigationContainer  independent={true}>
-      <ContentTab />
+      <LoginStack />
     </NavigationContainer>
   );
 };
 
-export default Navigation;
+export default LoginNavigation;
