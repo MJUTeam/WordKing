@@ -1,13 +1,11 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BookShelfScreen from '../screens/BookShelfScreen';
-import CalenderScreen from '../screens/CalenderScreen';
 import CreateWordScreen from '../screens/CreateWordScreen';
-import QuizScreen from '../screens/QuizScreen';
 import SettingScreen from '../screens/SettingScreen';
+import CalendarStack from './CalendarStack';
 import { ContentRoutes } from './routes';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GRAY, PRIMARY } from '../colors';
-import WordQuizScreen from '../screens/WordQuizScreen';
 import QuizStack from './QuizStack';
 const Tab = createBottomTabNavigator();
 
@@ -51,11 +49,12 @@ const ContentTab = () => {
         }}
       />
       <Tab.Screen
-        name={ContentRoutes.Calender.name}
-        component={CalenderScreen}
+        name={ContentRoutes.CalendarStack.name}
+        component={CalendarStack}
         options={{
           tabBarIcon: (props) => getTabBarIcon({ ...props, name: 'calendar' }),
-          tabBarLabel: ContentRoutes.Calender.label,
+          tabBarLabel: ContentRoutes.CalendarStack.label,
+          unmountOnBlur: true,
         }}
       />
       <Tab.Screen

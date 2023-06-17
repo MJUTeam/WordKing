@@ -2,11 +2,12 @@ import { StyleSheet, Dimensions, View } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { PRIMARY, SECONDARY, WHITE } from '../colors';
 import { useState, useCallback } from 'react';
+import { getAllItems } from '../utils/ItemStorage';
 
 const minHeight = 310;
 const maxHeight = 350;
 
-const MonthCalendarList = ({ selected, setSelected }) => {
+const MonthCalendarList = ({ selected, setSelected, wordDates }) => {
   const [calendarHeight, setCalendarHeight] = useState(minHeight);
 
   const onMonthChange = useCallback(
@@ -19,6 +20,11 @@ const MonthCalendarList = ({ selected, setSelected }) => {
     },
     [calendarHeight]
   );
+
+  const reduceWordDates = wordDates.reduce((wd, date) => {
+    wd[date] = { marked: true };
+    return wd;
+  }, {});
 
   return (
     <View style={{ height: calendarHeight }}>
@@ -46,12 +52,9 @@ const MonthCalendarList = ({ selected, setSelected }) => {
         pagingEnabled
         onDayPress={(day) => {
           setSelected(day.dateString);
-          console.log('선택한 날짜:', day.dateString);
         }}
         markedDates={{
-          // '2023-06-01': { selected: true, marked: true, selectedColor: 'blue' },
-          // '2023-06-10': { marked: true },
-          // '2023-06-15': { marked: true, dotColor: 'red', activeOpacity: 0 },
+          ...reduceWordDates,
           [selected]: { selected: true },
         }}
       />
