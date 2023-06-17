@@ -28,7 +28,7 @@ function addWord(korean, english) {
       english: english,
       bookshelf: 0,
       marking: Marking.NONE.toString(),
-      date: '2023-06-16',
+      date: dateToString(new Date()),
     })
   );
   console.log('IN');
