@@ -1,11 +1,15 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
+
+const [sentence, setSentence] = useState(1);
 
 const SelectQuizStartScreen = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}> 1번 문제 </Text>
-      <Button title="QWER" onPress={() => correctClick(AsyncStorage.getItem)} />
+      <Text style={styles.text}> {sentence + '번 문제'} </Text>
+      <Text>item[sentence - 1]</Text>
+      <Button onPress={() => correctClick(AsyncStorage.getItem)} />
     </View>
   );
 };

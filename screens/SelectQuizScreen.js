@@ -1,28 +1,22 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, FlatList } from 'react-native';
 import Button from '../components/Button';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getAllItems, getAllKeys, getItemEnglish } from '../util/ItemStorage';
 
 const SelectQuizScreen = ({ navigation }) => {
-  // getAllwordList();
-  // 단어장 선택하는 View & Button
+  // 단어장 선택하는 View & Button -> map으로 AsyncStorage에 존재하는 모든 wordList 버튼 생성
+  const items = [1, 2, 3, 4, 5];
+  const itemList = items.map(function (item) {
+    return <Button title={itemList.key} onPress={() => console.log(itemList.key)} />;
+  });
+
   return (
     <View style={styles.container}>
       <Text>SelectQuizScreen</Text>
-      <View style={styles.selectWord}>
-        <Button title={'단어장 이름'} onPress={() => navigation.navigate('SelectQuizStart')} />
-      </View>
+      <View style={styles.selectWord}>itemList();</View>
       <Button title={'뒤로가기'} style={styles.backButton} onPress={() => navigation.goBack()} />
     </View>
   );
 };
-
-// 비동기함수를 동기함수처럼 변경 -> async (), await
-async function getAllwordList() {
-  AsyncStorage.getAllKeys();
-  if ((storageData = null)) {
-    <Text>현재 만들어진 단어장이 존재하지 않습니다.</Text>;
-  }
-}
 
 const styles = StyleSheet.create({
   container: {
