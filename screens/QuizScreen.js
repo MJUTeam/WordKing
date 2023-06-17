@@ -18,6 +18,10 @@ const QuizScreen = ({ navigation }) => {
         title={ContentRoutes.WordQuiz.label}
         onPress={() => navigation.navigate('WordQuiz')}
       />
+      <Button
+        title={ContentRoutes.SpeedQuiz.label}
+        onPress={() => navigation.navigate('SpeedQuiz')}
+      />
     </View>
   );
 };

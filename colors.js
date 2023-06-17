@@ -18,3 +18,9 @@ export const GRAY = {
   DEFAULT: '#756e6f',
   DARK: '#30282a',
 };
+
+export const Orange = {
+  LIGHT: '#fb6544',
+  DEFAULT: '#f59e0b',
+  DARK: '#b45309',
+};

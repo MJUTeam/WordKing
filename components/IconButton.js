@@ -13,7 +13,7 @@ const IconButton = ({ onPress, iconName, size, styles, disabled }) => {
       <MaterialCommunityIcons
         name={iconName}
         style={[defaultStyles.icon, styles?.icon]}
-        size={size}
+        size={size} 
       />
     </TouchableOpacity>
   );
