@@ -2,12 +2,13 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GRAY, WHITE } from '../colors';
 
-const IconButton = ({ onPress, iconName, size, styles }) => {
+const IconButton = ({ onPress, iconName, size, styles, disabled }) => {
   return (
     <TouchableOpacity
       style={[defaultStyles.container, styles?.container]}
       activeOpacity={0.7}
       onPress={onPress}
+      disabled={disabled}
     >
       <MaterialCommunityIcons
         name={iconName}
@@ -23,7 +24,6 @@ const defaultStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: WHITE,
     paddingHorizontal: 5,
     paddingVertical: 5,
   },
@@ -34,6 +34,7 @@ const defaultStyles = StyleSheet.create({
 
 IconButton.defaultProps = {
   size: 28,
+  disabled: false,
 };
 
 export default IconButton;
