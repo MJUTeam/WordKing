@@ -20,7 +20,7 @@ const convertMonth = [
   'December',
 ];
 
-const WeekCalendarList = ({ selected, setSelected }) => {
+const WeekCalendarList = ({ selected, setSelected, wordDates }) => {
   const [currentYearAndMonth, setCurrentYearAndMonth] = useState(
     `${convertMonth[today.getMonth()]} ${today.getFullYear()}`
   );
@@ -32,25 +32,20 @@ const WeekCalendarList = ({ selected, setSelected }) => {
     [currentYearAndMonth]
   );
 
+  const reduceWordDates = wordDates.reduce((wd, date) => {
+    wd[date] = { marked: true };
+    return wd;
+  }, {});
+
   return (
     <View style={styles.container}>
       <Text style={styles.yearAndMonth}>{currentYearAndMonth}</Text>
-      <CalendarProvider
-        date={selected}
-        onMonthChange={onMonthChange}
-        onDayPress={(day) => {
-          setSelected(day.dateString);
-          console.log('선택한 날짜:', day.dateString);
-        }}
-        markedDates={{
-          // '2023-06-01': { selected: true, marked: true, selectedColor: 'blue' },
-          // '2023-06-10': { marked: true },
-          // '2023-06-15': { marked: true, dotColor: 'red', activeOpacity: 0 },
-          [selected]: { selected: true },
-        }}
-      >
+      <CalendarProvider date={selected} onMonthChange={onMonthChange}>
         <WeekCalendar
           allowShadow={false}
+          onDayPress={(day) => {
+            setSelected(day.dateString);
+          }}
           theme={{
             backgroundColor: WHITE,
             calendarBackground: WHITE,
@@ -58,6 +53,10 @@ const WeekCalendarList = ({ selected, setSelected }) => {
             todayBackgroundColor: SECONDARY.LIGHT,
             selectedDayTextColor: PRIMARY.DARK,
             selectedDayBackgroundColor: PRIMARY.LIGHT,
+          }}
+          markedDates={{
+            ...reduceWordDates,
+            [selected]: { selected: true },
           }}
         />
       </CalendarProvider>
