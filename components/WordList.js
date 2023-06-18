@@ -39,9 +39,9 @@ const Word = ({ word, onPress }) => {
         />
       </View>
       <View style={styles.body}>
-        <Text style={styles.korean}>{word.korean}</Text>
+        <Text style={styles.english}>{word.english}</Text>
         <View style={{ borderRadius: 5, borderWidth: 1.5, borderColor: GRAY.LIGHT }}>
-          <Text style={styles.english}>{word.english}</Text>
+          <Text style={styles.korean}>{word.korean}</Text>
         </View>
       </View>
     </Pressable>
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   english: {
     padding: 3,
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 24,
     color: GRAY.DARK,
   },
   korean: {

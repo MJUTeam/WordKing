@@ -36,7 +36,6 @@ const CalendarScreen = ({ navigation }) => {
       setWords(items);
     })();
   }, [selected, isMonth]);
-  console.log(words.length);
   return (
     <View style={styles.container}>
       {isMonth ? (

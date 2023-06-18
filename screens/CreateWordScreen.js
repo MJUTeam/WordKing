@@ -63,7 +63,7 @@ const CreateWordScreen = () => {
 
 // prettier 적용하니 'id' 같은 부분 다 빠져서 이렇게 바꿈.
 // date랑 marking 부분도 바꿈 (성제 확인하면 주석 지워주세요)
-function addWord(korean, english) {
+function addWord(english, korean) {
   AsyncStorage.setItem(
     english,
     JSON.stringify({

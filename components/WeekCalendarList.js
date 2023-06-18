@@ -67,7 +67,7 @@ const WeekCalendarList = ({ selected, setSelected, wordDates }) => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 30,
-    height: 90,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
