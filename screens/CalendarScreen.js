@@ -1,8 +1,8 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { GRAY, WHITE } from '../colors';
 import MonthCalendarList from '../components/MonthCalendarList';
 import WordList from '../components/WordList';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import HR from '../components/HR';
 import IconButton from '../components/IconButton';
 import WeekCalendarList from '../components/WeekCalendarList';
@@ -14,6 +14,11 @@ const CalendarScreen = ({ navigation }) => {
   const [selected, setSelected] = useState(dateToString(new Date()));
   const [words, setWords] = useState([]);
   const [wordDates, setWordDates] = useState([]);
+  const calendarRef = useRef(null);
+
+  const jumpToday = () => {
+    calendarRef.current?.scrollToDay(new Date(), 0, true);
+  };
 
   useEffect(() => {
     (async () => {
@@ -31,11 +36,16 @@ const CalendarScreen = ({ navigation }) => {
       setWords(items);
     })();
   }, [selected, isMonth]);
-
+  console.log(words.length);
   return (
     <View style={styles.container}>
       {isMonth ? (
-        <MonthCalendarList selected={selected} setSelected={setSelected} wordDates={wordDates} />
+        <MonthCalendarList
+          selected={selected}
+          setSelected={setSelected}
+          wordDates={wordDates}
+          calenderRef={calendarRef}
+        />
       ) : (
         <WeekCalendarList selected={selected} setSelected={setSelected} wordDates={wordDates} />
       )}
@@ -43,6 +53,13 @@ const CalendarScreen = ({ navigation }) => {
         <IconButton
           onPress={() => setIsMonth(!isMonth)}
           iconName={isMonth ? 'chevron-double-up' : 'chevron-double-down'}
+        />
+        <IconButton
+          onPress={() => {
+            setSelected(dateToString(new Date()));
+            jumpToday();
+          }}
+          iconName={'calendar-today'}
         />
       </View>
       <HR styles={{ line: { borderBottomColor: GRAY.LIGHT } }} />

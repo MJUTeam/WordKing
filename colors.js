@@ -2,6 +2,7 @@ export const WHITE = '#ffffff';
 export const BLACK = '#000000';
 
 export const PRIMARY = {
+  SUPERLIGHT: '#fef4fb',
   LIGHT: '#ffe9f4',
   DEFAULT: '#ffc0cb',
   DARK: '#ff6781',

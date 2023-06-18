@@ -33,15 +33,15 @@ const Word = ({ word, onPress }) => {
           iconName={'cat'}
           size={20}
           styles={{
-            container: { backgroundColor: PRIMARY.LIGHT },
+            container: { backgroundColor: PRIMARY.SUPERLIGHT },
             icon: { color: getColor(word.marking) },
           }}
         />
       </View>
       <View style={styles.body}>
-        <Text style={styles.english}>{word.english}</Text>
+        <Text style={styles.korean}>{word.korean}</Text>
         <View style={{ borderRadius: 5, borderWidth: 1.5, borderColor: GRAY.LIGHT }}>
-          <Text style={styles.korean}>{word.korean}</Text>
+          <Text style={styles.english}>{word.english}</Text>
         </View>
       </View>
     </Pressable>
@@ -56,7 +56,6 @@ const WordList = ({ words, navigation }) => {
         id: item.id,
       });
     };
-
     return <Word word={item} onPress={onPress} />;
   };
 
@@ -65,7 +64,7 @@ const WordList = ({ words, navigation }) => {
 
 const styles = StyleSheet.create({
   word: {
-    backgroundColor: PRIMARY.LIGHT,
+    backgroundColor: PRIMARY.SUPERLIGHT,
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
@@ -97,4 +96,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(WordList);
+export default WordList;
