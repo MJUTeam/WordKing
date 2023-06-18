@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import { forwardRef, useState } from "react";
+import React, { forwardRef, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { GRAY, PRIMARY } from "../colors";
 
@@ -18,22 +18,21 @@ export const InputTypes = {
   PASSWORD : 'PASSWORD'
 }
 
-const Input = forwardRef(({ inputType, value, returnKeyType }, ref) => {
+const Input = forwardRef(({ inputType, value, returnKeyType, onChangeText }, ref) => {
   const {
     title,
     placeholder,
     keyboardType,
     secureTextEntry,
-    iconName:{active,inactive},
+    iconName: { active, inactive },
   } = InputTypeProps[inputType];
 
 
   const [isFocused, setIsFocused] = useState(false);
-  const [inputText, setInputText] = useState('');
 
-  const onChangeText = (text) => {
-    setInputText(text);
-  }
+  const handleTextChange = (text) => {
+    onChangeText(text);
+  };
 
   return (
     <View style={defaultStyles.container}>
@@ -44,7 +43,7 @@ const Input = forwardRef(({ inputType, value, returnKeyType }, ref) => {
       <View>
         <TextInput
           ref={ref}
-          value={inputText}
+          value={value}
           style={[defaultStyles.input,
           {
             borderColor:value||isFocused?PRIMARY.DEFAULT:GRAY.DARK,
@@ -62,7 +61,7 @@ const Input = forwardRef(({ inputType, value, returnKeyType }, ref) => {
           keyboardAppearance="light"
           onFocus={()=>setIsFocused(true)}
           onBlur={()=>setIsFocused(false)}
-          onChangeText={onChangeText}
+          onChangeText={handleTextChange}
     
         />
         <View style={defaultStyles.icon}>
