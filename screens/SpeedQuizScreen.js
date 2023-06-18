@@ -1,54 +1,40 @@
 import { StyleSheet, Text, useWindowDimensions, View, Alert } from 'react-native';
 import SpeedQuizButton,{ ButtonTypes } from '../components/SpeedQuizButton';
 import IconButton from '../components/IconButton';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Timer from '../components/Timer';
 import { useEffect,useState } from 'react';
+import { getAllItemsByBookshelves } from '../utils/ItemStorage';
 
-const SpeedQuizScreen = ({ navigation }) => {
+const SpeedQuizScreen = ({ navigation, route  }) => {
+  const { name } = route.params;
 
   const [result,setResult] = useState("");
   const [spelling,setSpelling] = useState("");
   const [meaning,setMeaning] = useState("");
   const [point,setPoint] = useState(0);
-  
+  const [letters,setLetters] = useState([]);
+
   const windowWidth = useWindowDimensions().width;
   const width = (windowWidth-5)/4;
 
-  const letters = spelling.split("");
   const maxLength = letters.length - 1;
 
-  const initWord = async () => {
+  const getWord = async () => {
     try {
-      const keys = await AsyncStorage.getAllKeys();
-      const randomKey = keys[Math.floor(Math.random() * keys.length)];
-      const value = await AsyncStorage.getItem(randomKey);
-      const info = JSON.parse(value);
-      setSpelling(info.english);
-      setMeaning(info.korean);
+      const items = await getAllItemsByBookshelves(name);
+      const randomIndex = Math.floor(Math.random() * items.length);
+      const randomItem = items[randomIndex];
+      setSpelling(randomItem.english);
+      setMeaning(randomItem.korean);
+      setLetters((letters)=>{ return (randomItem.english).split("")});
     } catch (error) {
       console.log(error);
     }
   };
   
-  useEffect(() => {initWord(); }, []);
 
-  const getWord = async () => {
-    try {
-      const keys = await AsyncStorage.getAllKeys();
-      const randomKey = keys[Math.floor(Math.random() * keys.length)];
-      AsyncStorage.getItem(randomKey)
-      .then(value => {
-        const info = JSON.parse(value);
-        setMeaning((mean)=>{ return info.korean;});
-        setSpelling((spelling)=>{ return info.english;});
-        return info;
-      })
-      .catch(error => console.log(error));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
+  useEffect(() => {getWord(); }, []);
 
 
   function shuffleArray(array) {
@@ -102,7 +88,7 @@ return (
         
         <View style={styles.number}>
           {
-          shuffleArray(letters.slice(0, maxLength + 1)).map((alpha, index) =>(          
+          shuffleArray(letters.slice(0, maxLength+1)).map((alpha, index) =>(          
             <SpeedQuizButton 
             key={alpha+index}
             title={alpha.toString()}
