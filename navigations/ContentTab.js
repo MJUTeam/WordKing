@@ -30,6 +30,7 @@ const ContentTab = () => {
         options={{
           tabBarIcon: (props) => getTabBarIcon({ ...props, name: 'book' }),
           tabBarLabel: ContentRoutes.CreateWord.label,
+          unmountOnBlur: true,
         }}
       />
       <Tab.Screen
@@ -38,6 +39,7 @@ const ContentTab = () => {
         options={{
           tabBarIcon: (props) => getTabBarIcon({ ...props, name: 'folder' }),
           tabBarLabel: ContentRoutes.BookShelf.label,
+          unmountOnBlur: true,
         }}
       />
       <Tab.Screen
@@ -46,6 +48,7 @@ const ContentTab = () => {
         options={{
           tabBarIcon: (props) => getTabBarIcon({ ...props, name: 'chat-question' }),
           tabBarLabel: ContentRoutes.Quiz.label,
+          unmountOnBlur: true,
         }}
       />
       <Tab.Screen
@@ -63,6 +66,7 @@ const ContentTab = () => {
         options={{
           tabBarIcon: (props) => getTabBarIcon({ ...props, name: 'cog' }),
           tabBarLabel: ContentRoutes.Setting.label,
+          unmountOnBlur: true,
         }}
       />
     </Tab.Navigator>
