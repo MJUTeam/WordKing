@@ -1,20 +1,78 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  Keyboard,
-  Pressable,
-  KeyboardAvoidingView,
-} from 'react-native';
-import { useState } from 'react';
+import { StyleSheet, View, Text, TextInput, Keyboard, Pressable, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';
 import Button from '../components/Button';
 
 const WordQuizScreen = ({ navigation }) => {
   const [answer, setAnswer] = useState('');
   const [score, setScore] = useState(0);
+  const [spelling, setSpelling] = useState('');
+  const [meaning, setMeaning] = useState('');
+  const [currentKeys, setCurrentKeys] = useState('');
+  const [currentKey, setCurrentKey] = useState('');
+  const [gameState, setGameState] = useState(false);
+  const [total, setTotal] = useState(0);
+
+  const initWord = async () => {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      setTotal(keys.length);
+      const randomKey = keys[Math.floor(Math.random() * keys.length)];
+      const value = await AsyncStorage.getItem(randomKey);
+      const info = JSON.parse(value);
+      setSpelling(info.english);
+      setMeaning(info.korean);
+      setCurrentKeys(keys);
+      setCurrentKey(randomKey);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const GameOver = () => {
+    if (gameState) {
+      Alert.alert(
+        '결과',
+        '점수:' + Math.ceil((score / total) * 100),
+        [{ text: '확인', onPress: () => navigation.goBack() }],
+        {
+          cancelable: false,
+        }
+      );
+    }
+  };
+
+  useEffect(() => {
+    initWord();
+  }, []);
+
+  const getWord = async () => {
+    try {
+      const keys = currentKeys.filter((element) => element !== currentKey);
+      const randomKey = keys[Math.floor(Math.random() * keys.length)];
+      setCurrentKeys(keys);
+      setCurrentKey(randomKey);
+      AsyncStorage.getItem(randomKey)
+        .then((value) => {
+          const info = JSON.parse(value);
+          setMeaning((mean) => {
+            return info.korean;
+          });
+          setSpelling((spelling) => {
+            return info.english;
+          });
+          return info;
+        })
+        .catch((error) => console.log(error));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   function answerChecker(answer) {
-    if (answer == 'qq') {
+    if (answer == spelling) {
+      setScore((score) => {
+        return score + 1;
+      });
       return true;
     } else {
       return false;
@@ -22,19 +80,25 @@ const WordQuizScreen = ({ navigation }) => {
   }
   return (
     <Pressable style={styles.container} onPress={() => Keyboard.dismiss()}>
+      <GameOver />
       <Button title={'뒤로가기'} onPress={() => navigation.goBack()} />
       <Text>WordQuizScreen</Text>
-      <Text>ddd</Text>
-      <TextInput placeholder="답을 입력하세요" onChangeText={(text) => setAnswer(text.trim())} />
-      <Button
-        title="확인"
-        onPress={() => {
-          if (answerChecker(answer)) {
-            setScore(score + 1);
-          }
-        }}
-        buttonStyle={{ width: 100, height: 100 }}
-      />
+      <Text>{meaning}</Text>
+      <View>
+        <TextInput placeholder="답을 입력하세요" onChangeText={(text) => setAnswer(text.trim())} />
+        <Button
+          title="확인"
+          onPress={() => {
+            answerChecker(answer);
+            if (currentKeys.length != 1) {
+              getWord();
+            } else {
+              setGameState(true);
+            }
+          }}
+          buttonStyle={{ width: 100, height: 100 }}
+        />
+      </View>
     </Pressable>
   );
 };
