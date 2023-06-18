@@ -6,7 +6,9 @@ import {useNavigation} from '@react-navigation/native';
 import { ContentRoutes } from "../navigations/routes";
 import {useState,useRef,useEffect} from "react";
 import Button from "../components/Button";
+import {signIn} from '../api/auth';
 import HR from '../components/HR';
+
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -22,9 +24,17 @@ const LoginScreen = () => {
     setDisabled(!email||!password);
   },[email,password]);
 
-  const onSubmit = () =>{
+  const onSubmit = async () =>{
     Keyboard.dismiss();
-    if(!disabled&&!isLoading){
+    if (!disabled && !isLoading) {
+      dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
+      try {
+        const user = await signIn({ email: email, password: password });
+        console.log(user);
+      } catch (error) {
+        console.log(error);
+      }
+      dispatch({type:AuthFormTypes.TOGGLE_LOADING});
       setIsLoading(ture);
       console.log(email,password);
       setIsLoading(false);
