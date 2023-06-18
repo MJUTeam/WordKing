@@ -1,20 +1,16 @@
 import { StyleSheet, View, Text } from 'react-native';
-import { firebaseAuth } from "../api/Firebase";
+import { firebaseAuth } from '../api/firebase';
 import Button from '../components/Button';
 
 const signOut = () => {
   firebaseAuth.signOut();
-
 };
 
 const SettingScreen = () => {
   return (
     <View style={styles.container}>
       <Text>SettingScreen</Text>
-      <Button
-       title="Logout"
-       onPress={signOut}
-      />
+      <Button title="Logout" onPress={signOut} />
     </View>
   );
 };
