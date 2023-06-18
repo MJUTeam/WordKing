@@ -1,4 +1,6 @@
 export const ContentRoutes = {
+  Login: { name: 'Login', label: '로그인' },
+  Main: { name: 'Main', label: '메인 화면' },
   CreateWord: { name: 'CreateWord', label: '단어 생성' },
   BookShelf: { name: 'BookShelf', label: '단어장' },
   QuizStack: { name: 'QuizeStack', label: '퀴즈' },
