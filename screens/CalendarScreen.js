@@ -14,10 +14,11 @@ const CalendarScreen = ({ navigation }) => {
   const [selected, setSelected] = useState(dateToString(new Date()));
   const [words, setWords] = useState([]);
   const [wordDates, setWordDates] = useState([]);
+  const [hideWord, setHideWord] = useState(false);
   const calendarRef = useRef(null);
 
-  const jumpToday = () => {
-    calendarRef.current?.scrollToDay(new Date(), 0, true);
+  const jumpToday = (date) => {
+    calendarRef.current?.scrollToDay(date, 0, true);
   };
 
   useEffect(() => {
@@ -27,6 +28,7 @@ const CalendarScreen = ({ navigation }) => {
       let set = new Set(wordDateArray);
       wordDateArray = [...set];
       setWordDates(wordDateArray);
+      jumpToday(selected);
     })();
   }, [isMonth]);
 
@@ -36,7 +38,7 @@ const CalendarScreen = ({ navigation }) => {
       setWords(items);
     })();
   }, [selected, isMonth]);
-  console.log(words.length);
+
   return (
     <View style={styles.container}>
       {isMonth ? (
@@ -51,19 +53,25 @@ const CalendarScreen = ({ navigation }) => {
       )}
       <View style={styles.buttons}>
         <IconButton
-          onPress={() => setIsMonth(!isMonth)}
+          onPress={() => {
+            setIsMonth(!isMonth);
+          }}
           iconName={isMonth ? 'chevron-double-up' : 'chevron-double-down'}
         />
         <IconButton
           onPress={() => {
             setSelected(dateToString(new Date()));
-            jumpToday();
+            jumpToday(new Date());
           }}
           iconName={'calendar-today'}
         />
+        <IconButton
+          onPress={() => setHideWord(!hideWord)}
+          iconName={hideWord ? 'eye-outline' : 'eye-off'}
+        />
       </View>
       <HR styles={{ line: { borderBottomColor: GRAY.LIGHT } }} />
-      <WordList words={words} navigation={navigation} />
+      <WordList words={words} navigation={navigation} hideWord={hideWord} />
     </View>
   );
 };

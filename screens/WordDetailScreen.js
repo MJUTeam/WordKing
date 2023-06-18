@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
 import { GRAY, PRIMARY, WHITE } from '../colors';
 import HR from '../components/HR';
@@ -12,6 +12,7 @@ const WordDetailScreen = ({ route, navigation }) => {
   const { words, id } = route.params;
   const [index, setIndex] = useState(0);
   const [marking, setMarking] = useState('');
+  const [hideKorean, setHideKorean] = useState(false);
 
   useEffect(() => {
     for (let i = 0; i < words.length; i++) {
@@ -51,12 +52,14 @@ const WordDetailScreen = ({ route, navigation }) => {
           }}
         />
       </View>
-      <View style={styles.body}>
+      <TouchableOpacity style={styles.body} onPressOut={() => setHideKorean(!hideKorean)}>
         <Text style={styles.english}>{word.english}</Text>
-        <View style={{ borderRadius: 5, borderWidth: 1.5, borderColor: GRAY.LIGHT }}>
-          <Text style={styles.korean}>{word.korean}</Text>
-        </View>
-      </View>
+        {hideKorean ? null : (
+          <View style={{ borderRadius: 5, borderWidth: 1.5, borderColor: GRAY.LIGHT }}>
+            <Text style={styles.korean}>{word.korean}</Text>
+          </View>
+        )}
+      </TouchableOpacity>
       <HR styles={{ line: { borderBottomColor: GRAY.LIGHT } }} />
       <View style={styles.footer}>
         <IconButton
@@ -122,14 +125,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   english: {
-    fontSize: 32,
+    fontSize: 40,
     fontWeight: 'bold',
     textAlign: 'center',
     paddingBottom: 20,
     color: GRAY.DARK,
   },
   korean: {
-    fontSize: 24,
+    fontSize: 30,
     textAlign: 'center',
     padding: 2,
     color: GRAY.DARK,
@@ -144,8 +147,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 13,
     padding: 5,
-    // paddingHorizontal: 10,
-    // paddingVertical: 10,
   },
 });
 
