@@ -1,5 +1,6 @@
 import { StyleSheet, Text, useWindowDimensions, View, Alert } from 'react-native';
 import SpeedQuizButton,{ ButtonTypes } from '../components/SpeedQuizButton';
+import IconButton from '../components/IconButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Timer from '../components/Timer';
 import { useEffect,useState } from 'react';
@@ -73,26 +74,35 @@ const SpeedQuizScreen = ({ navigation }) => {
 
 return (
   <View style={styles.container} >
+    <View style={styles.goalContainer}>
+    <Text style = {styles.problem} > 문제 </Text>
+    <Text style={ styles.goal }>{meaning} </Text>
+
+    </View>
+
     <View style={styles.pointContainer}>
       <Text style = { styles.text } >점수 : {point}</Text>
-      <Timer timeLimit={10} onTimeUp={handleTimeUp} />
+      <IconButton
+        size={50}
+        onPress={() => {
+          navigation.goBack();
+        }}
+        iconName={'arrow-left-bold-box-outline'}
+      />
     </View>
 
-    <View style={styles.goalContainer}>
-    <Text style={ styles.goal }>{meaning} </Text>
-    <Text style = {styles.problem} > 문제 </Text>
-    </View>
-  
     <View style={styles.resultContainer}>
-      <SpeedQuizButton title={'뒤로가기'} onPress={() => navigation.goBack()} />
+      
       <Text style = { styles.text } > {result} </Text>
+      
     </View>
-
+    <Timer timeLimit={100} onTimeUp={handleTimeUp} />
     <View style={styles.buttonContainer}>
       <View style={styles.leftPad}>
         
         <View style={styles.number}>
-          {shuffleArray(letters.slice(0, maxLength + 1)).map((alpha, index) =>(          
+          {
+          shuffleArray(letters.slice(0, maxLength + 1)).map((alpha, index) =>(          
             <SpeedQuizButton 
             key={alpha+index}
             title={alpha.toString()}
@@ -140,13 +150,15 @@ container: {
   justifyContent: 'center',
 },
 pointContainer: {
-  flex: 0.2,
-  paddingTop:20,
+  flex: 0.1,
+  flexDirection:'row',
+  alignItems: 'space-between',
 },
 goalContainer: {
-  flex: 0.5,
+  flex: 0.2,
   justifyContent: 'center',
   alignItems: 'center',
+  paddingTop:20,
 },
 
 problem:{
@@ -161,18 +173,19 @@ goal:{
   paddingBottom : 30,
 },
 resultContainer: {
-  flex: 0.5,
+  flex: 0.2,
   justifyContent: 'flex-end',
   alignItems: 'flex-end',
 },
 text:{
-  fontSize:60,
+  fontSize:40,
   fontWeight:'700',
   color: '#b11000',
-  paddingBottom : 30,
+  paddingBottom : 10,
   paddingRight : 30,
 },
 buttonContainer:{
+  flex: 0.5,
   backgroundColor:'#000000',
   flexDirection:"row",
   justifyContent:'space-evenly',
