@@ -1,11 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StyleSheet, View, Text, TextInput, Button, FlatList, Modal, Pressable } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Item from '../src/Item';
-
-var JSONList = [];      // 모든 로컬 JSON 파일을 담은 리스트
-var wordList = [];      // JSON 파일 중 단어만 담은 리스트
-var bookshelfList = []  // JSON 파일 중 단어장만 담은 리스트
 
 /*
 JSON File Convention
@@ -30,13 +26,107 @@ JSON File Convention
 
 const BookShelfScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [bookshelfModalVisible, setBookshelfModalVisible] = useState( false );
   const [bookshelfName, setBookshelfName] = useState("단어장 이름");
+  const [bookshelfList, setBookshelfList] = useState([]);
+  const [wordList, setWordList] = useState([]);
+  const [selectedID, setSelectedID] = useState("0");
+  const [tempList, setTempList] = useState();
+  const [selectedBookshelf, setSelectedBookshelf] = useState("");
 
   JSONList = [];
-  wordList = [];
-  bookshelfList = [];
-  getAllWord();
-  getBookshelf();
+  useEffect(() => {
+    getAllWord();
+    getBookshelf();
+  }, []);
+
+  function getAllWord() {
+    AsyncStorage.getAllKeys((err, keys) => {
+      AsyncStorage.multiGet(keys, (err, stores) => {
+        const parsedStores = stores.map(([key, value]) => JSON.parse(value));
+        const words = parsedStores.filter(item => item.isWord);
+        const bookshelves = parsedStores.filter(item => !item.isWord);
+
+        setWordList(words);
+        setBookshelfList(bookshelves);
+      });
+    });
+  }
+
+  function getBookshelf() {
+    AsyncStorage.getAllKeys((err, keys) => {
+      AsyncStorage.multiGet(keys, (err, stores) => {
+        const parsedStores = stores.map(([key, value]) => JSON.parse(value));
+        const bookshelves = parsedStores.filter(item => !item.isWord);
+
+        setBookshelfList(bookshelves);
+      });
+    });
+  }
+
+  function getBookshelfById( id ){
+    AsyncStorage.getItem(id)
+      .then(value => {
+        const info = JSON.parse(value);
+        setSelectedBookshelf( info.name );
+        getBookshelfWords( info.name );
+      })
+      .catch(error => console.log(error));
+  }
+  function getBookshelfWords( id ){
+    console.log( id );
+    var temp = wordList.filter( word => id==word.bookshelf );
+    setTempList( temp );
+  }
+
+  const clickAddButoon = ( name ) => {
+    addBookshelf( name ); 
+    setModalVisible(!modalVisible);
+  }
+
+  const clickBookshelf = ( item ) => {
+    setSelectedID( item.id );
+    openBookshelfModal( item.name );
+    getBookshelfById( item.id );
+  }
+
+
+  function addBookshelf(name) {
+    const id = bookshelfList.length;
+    const newBookshelf = {
+      id: id.toString(),
+      name: name,
+      isWord: false
+    };
+    
+    AsyncStorage.setItem(id.toString(), JSON.stringify(newBookshelf))
+      .then(() => {
+        setBookshelfList(prevList => [...prevList, newBookshelf]);
+        console.log("ON");
+      })
+      .catch(error => console.log(error));
+  }
+
+  function deb(){
+    console.log( wordList );
+    console.log( bookshelfList );
+  }
+
+  function openBookshelfModal( id ){
+    setBookshelfModalVisible( !bookshelfModalVisible );
+  }
+
+  function deleteBookshelf(){
+    console.log( selectedID );
+    AsyncStorage.removeItem( selectedID );
+    getBookshelf();
+    setBookshelfModalVisible( !bookshelfModalVisible );
+  }
+
+  function modifyBookshelf( id ){
+    
+  }
+
   return (
     <View style={styles.container}>
       <Modal
@@ -59,7 +149,7 @@ const BookShelfScreen = () => {
             <View style={styles.modalButton}>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => addBookshelf(bookshelfName)}>
+                onPress={() => clickAddButoon(bookshelfName)}>
                 <Text style={styles.textStyle}>확인</Text>
               </Pressable>
               <Pressable
@@ -67,6 +157,46 @@ const BookShelfScreen = () => {
                 onPress={() => setModalVisible(!modalVisible)}>
                 <Text style={styles.textStyle}>취소</Text>
               </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={bookshelfModalVisible}
+        onRequestClose={() => {
+          setModalVisible(!bookshelfModalVisible);
+        }}>
+        
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={styles.bookshelfModalTitle}>
+              <Text style={styles.bookshelfTitleText}> { selectedBookshelf }</Text>
+            </View>
+            <View style={styles.bookshelfModalContent}>
+              <FlatList 
+                data={ tempList }
+                renderItem={ ({item}) => <Text style={styles.wordItem}> {item.korean} {item.english} </Text>}
+              />
+            </View>
+            <View style={styles.bookshelfModalButton}>
+              <Pressable
+                  style={[styles.button, styles.buttonModify]}
+                  onPress={() => modifyBookshelf()}>
+                  <Text style={styles.textStyle}>수정</Text>
+                </Pressable>
+                <Pressable
+                  style={[styles.button, styles.buttonDelete]}
+                  onPress={() => deleteBookshelf()}>
+                  <Text style={styles.textStyle}>삭제</Text>
+                </Pressable>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => setBookshelfModalVisible(!bookshelfModalVisible)}>
+                  <Text style={styles.textStyle}>닫기</Text>
+                </Pressable>  
             </View>
           </View>
         </View>
@@ -79,14 +209,17 @@ const BookShelfScreen = () => {
         <FlatList
           keyExtractor={item => item.id}
           data={bookshelfList}
-          renderItem={({item}) => <Item bookshelf={item} />}
-          
+          renderItem={({item}) => <Item bookshelf={item} onPress={() => clickBookshelf(item)} />}
         />
       </View>
       <View style={styles.buttonView}>
         <Button
           title="단어장 추가"
           onPress={ () => setModalVisible(true) }
+        />
+        <Button 
+          title="DB"
+          onPress={ () => deb() }
         />
       </View>
     </View>
@@ -129,13 +262,6 @@ const getBookshelf = async () => {
           bookshelfList.push( JSONList[i] );
         }
       }
-      if( bookshelfList.length == 0 ){
-        AsyncStorage.setItem( '0', JSON.stringify( { 
-          'id': "0",  
-          'name': "지정 없음", 
-          'isWord': false
-        } ) );
-      }
     });
   });
 };
@@ -148,17 +274,6 @@ function getWord( ID ){
       })
       .catch(error => console.log(error));
 }
-
-function addBookshelf( name ){
-  let id = bookshelfList.length + 1;
-  AsyncStorage.setItem( id, JSON.stringify( { 
-    'id': id,  
-    'name': name, 
-    'isWord': false
-  } ) );
-  console.log( "ON" );
-}
-
 
 const styles = StyleSheet.create({
   title: {
@@ -187,11 +302,11 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   modalView: {
-    margin: 20,
+    margin: 10,
     width: "75%",
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 35,
+    padding: 10,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -212,7 +327,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F194FF',
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: 'gray',
   },
   textStyle: {
     color: 'white',
@@ -239,6 +354,30 @@ const styles = StyleSheet.create({
   nameTextInput: {
     fontSize: 20,
     color: "lightgray"
+  },
+  bookshelfModalTitle: {
+    height: "10%",
+    justifyContent: "center"
+  },
+  bookshelfModalContent: {
+    height: "70%"
+  },
+  bookshelfModalButton: {
+    flexDirection: 'row'
+  },
+  buttonModify: {
+    backgroundColor: 'green',
+  },
+  buttonDelete: {
+    backgroundColor: 'red',
+  },
+  bookshelfTitleText: {
+    fontSize: 40,
+    fontWeight: 'bold'
+  },
+  wordItem: {
+    margin: 10,
+    fontSize: 20
   }
 });
 
