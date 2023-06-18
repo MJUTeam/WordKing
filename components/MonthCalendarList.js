@@ -1,14 +1,20 @@
-import { StyleSheet, Dimensions, View } from 'react-native';
+import { StyleSheet, Dimensions, View, Animated } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { PRIMARY, SECONDARY, WHITE } from '../colors';
-import { useState, useCallback } from 'react';
-import { getAllItems } from '../utils/ItemStorage';
+import { useCallback } from 'react';
 
 const minHeight = 310;
 const maxHeight = 350;
+const calendarHeight = new Animated.Value(minHeight);
 
-const MonthCalendarList = ({ selected, setSelected, wordDates }) => {
-  const [calendarHeight, setCalendarHeight] = useState(minHeight);
+const MonthCalendarList = ({ selected, setSelected, wordDates, calenderRef }) => {
+  const animateCalendarView = (newCalendarHeight) => {
+    Animated.timing(calendarHeight, {
+      toValue: newCalendarHeight,
+      duration: 150,
+      useNativeDriver: false,
+    }).start();
+  };
 
   const onMonthChange = useCallback(
     (currentMonth) => {
@@ -16,7 +22,7 @@ const MonthCalendarList = ({ selected, setSelected, wordDates }) => {
       const currentMonthDayNum = new Date(currentMonth.year, currentMonth.month, 0).getDate();
       const totalDay = 36 - lastMonthDayNum;
       const newCalendarHeight = totalDay <= currentMonthDayNum ? maxHeight : minHeight;
-      setCalendarHeight(newCalendarHeight);
+      animateCalendarView(newCalendarHeight);
     },
     [calendarHeight]
   );
@@ -27,8 +33,9 @@ const MonthCalendarList = ({ selected, setSelected, wordDates }) => {
   }, {});
 
   return (
-    <View style={{ height: calendarHeight }}>
+    <Animated.View style={{ height: calendarHeight }}>
       <CalendarList
+        ref={calenderRef}
         calendarWidth={Dimensions.get('window').width}
         onMonthChange={onMonthChange}
         theme={{
@@ -58,7 +65,7 @@ const MonthCalendarList = ({ selected, setSelected, wordDates }) => {
           [selected]: { selected: true },
         }}
       />
-    </View>
+    </Animated.View>
   );
 };
 
