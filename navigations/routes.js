@@ -11,6 +11,7 @@ export const ContentRoutes = {
   MeanQuiz: { name: 'MeanQuiz', label: '의미 맞추기' },
   WordQuiz: { name: 'WordQuiz', label: '단어 맞추기' },
   SpeedQuiz: { name: 'SpeedQuiz', label: '스피드 퀴즈' },
+  SelectSpeedQuiz: { name: 'SelectSpeedQuiz', label: '스피드 퀴즈 선택' },
   Calendar: { name: 'Calendar', label: '달력' },
   WordDetail: { name: 'WordDetail', label: '단어 상세' },
 };

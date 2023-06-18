@@ -3,8 +3,7 @@ import Button from '../components/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 
-const SelectQuizScreen = ({ navigation }) => {
-  // 단어장 선택하는 View & Button -> map으로 AsyncStorage에 존재하는 모든 wordList 버튼 생성
+const SelectSpeedQuizScreen = ({ navigation }) => {
 
   const [wordbooks, setWordbooks] = useState([]);
 
@@ -23,6 +22,10 @@ const SelectQuizScreen = ({ navigation }) => {
     });
   };
 
+  const navigateToSpeedQuiz = (name) => {
+    navigation.navigate('SpeedQuiz', { name });
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>단어장 선택</Text>
@@ -30,7 +33,7 @@ const SelectQuizScreen = ({ navigation }) => {
         <Button
           key={wordbookKey.id}
           title={wordbookKey.name}
-          onPress={() => navigation.navigate('SelectQuizStart', { id: wordbookKey.id })}
+          onPress={() => navigateToSpeedQuiz(wordbookKey.name)}
         />
       ))}
       <Button title="뒤로 가기" onPress={() => navigation.goBack()} />
@@ -52,4 +55,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SelectQuizScreen;
+export default SelectSpeedQuizScreen;
