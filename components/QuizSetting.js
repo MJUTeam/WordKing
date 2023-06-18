@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
 
 // 문제 수 표현
-const [count, setCount] = useState(0);
+const [correct, setCorrect] = useState(0);
 // 답안 표현
 const [sentence, setSentence] = useState({
   english: '',
@@ -32,7 +32,7 @@ const QuizSetting = () => {
   });
 
   // 각 답의 뜻 저장 -> 답 비교
-  setCount([
+  setCorrect([
     {
       korean: AsyncStorage.getItem[array[0]].korean,
     },
