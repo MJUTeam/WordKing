@@ -22,6 +22,9 @@ const SpeedQuizScreen = ({ navigation, route  }) => {
   const getWord = async () => {
     try {
       const items = await getAllItemsByBookshelves(name);
+      if(!items){
+        Alert.alert("에러","단어장이 비어있습니다.")
+      }
       const randomIndex = Math.floor(Math.random() * items.length);
       const randomItem = items[randomIndex];
       setSpelling(randomItem.english);

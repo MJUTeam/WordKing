@@ -1,5 +1,4 @@
 import { StyleSheet, View, Text } from 'react-native';
-import Button from '../components/Button';
 import { ContentRoutes } from '../navigations/routes';
 import IconTitleButton from '../components/IconTitleButton';
 
@@ -28,7 +27,7 @@ const QuizScreen = ({ navigation }) => {
       <IconTitleButton
         title={ContentRoutes.SpeedQuiz.label}
         size={40}
-        onPress={() => navigation.navigate('SelectQuiz')}
+        onPress={() => navigation.navigate('SelectSpeedQuiz')}
         iconName={'timer-outline'}
       />
     </View>
