@@ -1,7 +1,8 @@
 import { StyleSheet, View, Text, TextInput, Keyboard, Pressable, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
-import Button from '../components/Button';
+import IconButton from '../components/IconButton';
+import IconTitleButton from '../components/IconTitleButton';
 
 const WordQuizScreen = ({ navigation }) => {
   const [answer, setAnswer] = useState('');
@@ -81,12 +82,18 @@ const WordQuizScreen = ({ navigation }) => {
   return (
     <Pressable style={styles.container} onPress={() => Keyboard.dismiss()}>
       <GameOver />
-      <Button title={'뒤로가기'} onPress={() => navigation.goBack()} />
+      <IconButton
+        size={50}
+        onPress={() => {
+          navigation.goBack();
+        }}
+        iconName={'arrow-left-bold-box-outline'}
+      />
       <Text>WordQuizScreen</Text>
       <Text>{meaning}</Text>
       <View>
         <TextInput placeholder="답을 입력하세요" onChangeText={(text) => setAnswer(text.trim())} />
-        <Button
+        <IconTitleButton
           title="확인"
           onPress={() => {
             answerChecker(answer);
@@ -96,7 +103,7 @@ const WordQuizScreen = ({ navigation }) => {
               setGameState(true);
             }
           }}
-          buttonStyle={{ width: 100, height: 100 }}
+          iconName={'check'}
         />
       </View>
     </Pressable>
