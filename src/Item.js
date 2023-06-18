@@ -1,14 +1,12 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 
-const Item = ({word}) => {
+const Item = ({bookshelf}) => {
+  console.log( bookshelf)
   return (
     <View style={styles.container}>
         <View style={styles.block}>
-            <Text style={styles.text}>{word.korean}</Text>
-        </View>
-        <View style={styles.block}>
-            <Text style={styles.text}>{word.english}</Text>
+            <Text style={styles.text}>{bookshelf.name}</Text>
         </View>
     </View>
   );
