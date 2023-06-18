@@ -4,7 +4,7 @@ import ContentTab from './ContentTab';
 
 const Navigation = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer  independent={true}>
       <ContentTab />
     </NavigationContainer>
   );
