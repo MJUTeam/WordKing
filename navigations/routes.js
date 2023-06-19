@@ -14,4 +14,5 @@ export const ContentRoutes = {
   SelectSpeedQuiz: { name: 'SelectSpeedQuiz', label: '스피드 퀴즈 선택' },
   Calendar: { name: 'Calendar', label: '달력' },
   WordDetail: { name: 'WordDetail', label: '단어 상세' },
+  BookShelfSelect: { name: 'BookShelfSelect', label: '단어장 선택' },
 };

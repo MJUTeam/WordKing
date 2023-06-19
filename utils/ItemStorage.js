@@ -36,15 +36,15 @@ export const getAllItemsByDate = async (date) => {
 };
 
 export const getAllItemsByBookshelves = async (name) => {
-  const keys = await getAllKeys();
+  const keys = await AsyncStorage.getAllKeys();
   const items = [];
   for (const key of keys) {
     const jsonValue = await AsyncStorage.getItem(key);
     const value = JSON.parse(jsonValue);
-      if (name === value.bookshelf ) {
-        items.push(value);
-      }
-  } 
+    if (name === value.bookshelf) {
+      items.push(value);
+    }
+  }
   return items;
 };
 
