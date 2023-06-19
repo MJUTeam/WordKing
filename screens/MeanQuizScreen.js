@@ -1,40 +1,25 @@
 import { StyleSheet, View, Text, TextInput, Keyboard, Pressable, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
-import Button from '../components/Button';
 import IconButton from '../components/IconButton';
 import IconTitleButton from '../components/IconTitleButton';
+import { getAllItemsByBookshelves } from '../utils/ItemStorage';
 
-const MeanQuizScreen = ({ navigation }) => {
+const MeanQuizScreen = ({ route, navigation }) => {
   const [answer, setAnswer] = useState('');
   const [score, setScore] = useState(0);
   const [spelling, setSpelling] = useState('');
   const [meaning, setMeaning] = useState('');
-  const [currentKeys, setCurrentKeys] = useState('');
-  const [currentKey, setCurrentKey] = useState('');
+  const [currentItems, setCurrentItems] = useState('');
+  const [currentItem, setCurrentItem] = useState('');
   const [gameState, setGameState] = useState(false);
   const [total, setTotal] = useState(0);
+  const [initState, setInitState] = useState(true);
 
-  const initWord = async () => {
-    try {
-      const keys = await AsyncStorage.getAllKeys();
-      setTotal(keys.length);
-      const randomKey = keys[Math.floor(Math.random() * keys.length)];
-      const value = await AsyncStorage.getItem(randomKey);
-      const info = JSON.parse(value);
-      setSpelling(info.english);
-      setMeaning(info.korean);
-      setCurrentKeys(keys);
-      setCurrentKey(randomKey);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const GameOver = () => {
     if (gameState) {
       Alert.alert(
         '결과',
-        '점수:' + Math.ceil((score / total) * 100),
+        '정답률:' + Math.ceil((score / total) * 100, '%'),
         [{ text: '확인', onPress: () => navigation.goBack() }],
         {
           cancelable: false,
@@ -44,27 +29,34 @@ const MeanQuizScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    initWord();
+    getWord();
   }, []);
 
   const getWord = async () => {
     try {
-      const keys = currentKeys.filter((element) => element !== currentKey);
-      const randomKey = keys[Math.floor(Math.random() * keys.length)];
-      setCurrentKeys(keys);
-      setCurrentKey(randomKey);
-      AsyncStorage.getItem(randomKey)
-        .then((value) => {
-          const info = JSON.parse(value);
-          setMeaning((mean) => {
-            return info.korean;
-          });
-          setSpelling((spelling) => {
-            return info.english;
-          });
-          return info;
-        })
-        .catch((error) => console.log(error));
+      var items = [];
+      if (initState) {
+        items = await getAllItemsByBookshelves(route.params.name);
+        if (!items) {
+          Alert.alert('에러', '단어장이 비어있습니다.');
+        }
+        const randomIndex = Math.floor(Math.random() * items.length);
+        const randomItem = items[randomIndex];
+        setSpelling(randomItem.english);
+        setMeaning(randomItem.korean);
+        setCurrentItems(items);
+        setCurrentItem(randomItem);
+        setTotal(items.length);
+        setInitState(false);
+      } else {
+        items = currentItems.filter((element) => element !== currentItem);
+        const randomIndex = Math.floor(Math.random() * items.length);
+        const randomItem = items[randomIndex];
+        setSpelling(randomItem.english);
+        setMeaning(randomItem.korean);
+        setCurrentItems(items);
+        setCurrentItem(randomItem);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -83,6 +75,7 @@ const MeanQuizScreen = ({ navigation }) => {
   return (
     <Pressable style={styles.container} onPress={() => Keyboard.dismiss()}>
       <GameOver />
+      <Text>{score}</Text>
       <IconButton
         size={50}
         onPress={() => {
@@ -90,7 +83,7 @@ const MeanQuizScreen = ({ navigation }) => {
         }}
         iconName={'arrow-left-bold-box-outline'}
       />
-      <Text>WordQuizScreen</Text>
+      <Text>MeanQuizScreen</Text>
       <Text>{spelling}</Text>
       <View>
         <TextInput placeholder="답을 입력하세요" onChangeText={(text) => setAnswer(text.trim())} />
@@ -98,7 +91,7 @@ const MeanQuizScreen = ({ navigation }) => {
           title="확인"
           onPress={() => {
             answerChecker(answer);
-            if (currentKeys.length != 1) {
+            if (currentItems.length != 1) {
               getWord();
             } else {
               setGameState(true);
