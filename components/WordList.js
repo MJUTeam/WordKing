@@ -3,7 +3,7 @@ import { FlatList, View, Text, Pressable, StyleSheet } from 'react-native';
 import { GRAY, PRIMARY } from '../colors';
 import { ContentRoutes } from '../navigations/routes';
 import IconButton from './IconButton';
-import { getColor, nextMarking } from './Marking';
+import { HideWord, getColor, nextMarking } from './Marking';
 import { setItem } from '../utils/ItemStorage';
 import Toast from 'react-native-simple-toast';
 import { useIsFocused } from '@react-navigation/native';
@@ -39,15 +39,15 @@ const Word = ({ word, onPress, hideWord }) => {
         />
       </View>
       <View style={styles.body}>
-        <Text style={styles.english}>{word.english}</Text>
-        {hideWord ? (
+        {hideWord === HideWord.ENGLISH ? null : <Text style={styles.english}>{word.english}</Text>}
+        {hideWord === HideWord.KOREAN ? null : (
           <View
             style={{ borderRadius: 5, borderWidth: 1.5, borderColor: GRAY.LIGHT }}
             visible={hideWord}
           >
             <Text style={styles.korean}>{word.korean}</Text>
           </View>
-        ) : null}
+        )}
       </View>
     </Pressable>
   );

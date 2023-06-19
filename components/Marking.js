@@ -6,6 +6,12 @@ export const Marking = {
   CONFUSION: 'CONFUSION',
 };
 
+export const HideWord = {
+  NONE: 'NONE',
+  ENGLISH: 'ENGLISH',
+  KOREAN: 'KOREAN',
+};
+
 export const nextMarking = (marking) => {
   switch (marking) {
     case Marking.NONE:
