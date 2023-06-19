@@ -12,6 +12,17 @@ export const getAllWords = async () => {
   return Promise.all(promiseItems);
 };
 
+export const getAllItemsByBook = async () => {
+  const keys = await getAllKeys();
+  const items = [];
+  for (const key of keys) {
+    const jsonValue = await AsyncStorage.getItem(key);
+    const value = JSON.parse(jsonValue);
+    items.push(value);
+  }
+  return items;
+};
+
 export const getAllItemsByDate = async (date) => {
   const keys = await AsyncStorage.getAllKeys();
   const promiseItems = keys.map(async (key) => {
@@ -22,6 +33,19 @@ export const getAllItemsByDate = async (date) => {
     }
   });
   return Promise.all(promiseItems);
+};
+
+export const getAllItemsByBookshelves = async (name) => {
+  const keys = await getAllKeys();
+  const items = [];
+  for (const key of keys) {
+    const jsonValue = await AsyncStorage.getItem(key);
+    const value = JSON.parse(jsonValue);
+      if (name === value.bookshelf ) {
+        items.push(value);
+      }
+  } 
+  return items;
 };
 
 export const setItem = async (word) => {

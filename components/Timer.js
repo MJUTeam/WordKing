@@ -31,6 +31,7 @@ const Timer = ({ timeLimit , onTimeUp}) => {
 const styles = StyleSheet.create({
   timerContainer: {
     alignItems: 'center',
+    paddingBottom: 10,
   },
   timerText: {
     fontSize: 24,

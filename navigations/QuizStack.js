@@ -6,7 +6,7 @@ import SelectQuizScreen from '../screens/SelectQuizScreen';
 import { GRAY, PRIMARY } from '../colors';
 import QuizScreen from '../screens/QuizScreen';
 import SpeedQuizScreen from '../screens/SpeedQuizScreen';
-
+import SelectSpeedQuizScreen from '../screens/SelectSpeedQuizScreen';
 const Stack = createNativeStackNavigator();
 
 const QuizStack = () => {
@@ -24,6 +24,7 @@ const QuizStack = () => {
       <Stack.Screen name={ContentRoutes.MeanQuiz.name} component={MeanQuizScreen} />
       <Stack.Screen name={ContentRoutes.WordQuiz.name} component={WordQuizScreen} />
       <Stack.Screen name={ContentRoutes.SpeedQuiz.name} component={SpeedQuizScreen} />
+      <Stack.Screen name={ContentRoutes.SelectSpeedQuiz.name} component={SelectSpeedQuizScreen} />
     </Stack.Navigator>
   );
 };
