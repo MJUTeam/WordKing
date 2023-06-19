@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
-import { GRAY, PRIMARY, WHITE } from '../colors';
+import { GRAY, WHITE } from '../colors';
 import HR from '../components/HR';
 import IconButton from '../components/IconButton';
 import { getColor, nextMarking } from '../components/Marking';
