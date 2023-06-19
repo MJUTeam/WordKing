@@ -1,13 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StyleSheet, View, Text, TextInput, Button, Modal, Pressable } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Button, Modal, Pressable, Alert } from 'react-native';
 import React, { useCallback, useState, useEffect } from 'react';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { Marking } from '../components/Marking';
 import { dateToString } from '../utils/UtilFunc';
 
 const CreateWordScreen = () => {
-  const [wordEnglish, onChangeEnglish] = useState('단어를 입력하세요');
-  const [wordKorean, onChangeKorean] = useState('단어를 입력하세요');
+  const [wordEnglish, onChangeEnglish] = useState('');
+  const [wordKorean, onChangeKorean] = useState('');
   const [selectedBookshelf, selectBookshelf] = useState('0');
   const [bookshelfList, setBookshelfList] = useState([]);
   const [, setState] = useState();
@@ -28,6 +28,15 @@ const CreateWordScreen = () => {
     initBookshelf(); // 컴포넌트가 처음 렌더링될 때 한 번만 실행됩니다.
   }, []);
 
+  const addWordAlert = () =>
+  Alert.alert('단어 추가', '단어가 추가되었습니다', [
+    {
+      text: '확인',
+      onPress: () => console.log('확인'),
+      style: 'cancel',
+    },
+  ]);
+  
   function addWord(english, korean) {
     console.log(selectedBookshelf);
     AsyncStorage.setItem(
@@ -43,6 +52,7 @@ const CreateWordScreen = () => {
       })
     );
     console.log('IN');
+    addWordAlert();
     setState();
   }
 
@@ -70,13 +80,13 @@ const CreateWordScreen = () => {
       <View style={styles.inputEnglishView}>
         <Text style={styles.checkText}> 영어 단어: </Text>
         <View style={styles.inputTextline}>
-          <TextInput style={styles.inputStyle} value={wordEnglish} onChangeText={onChangeEnglish} />
+          <TextInput style={styles.inputStyle} placeholder="단어를 입력하세요" value={wordEnglish} onChangeText={onChangeEnglish} />
         </View>
       </View>
       <View style={styles.inputKoreanView}>
         <Text style={styles.checkText}> 한글 단어: </Text>
         <View style={styles.inputTextline}>
-          <TextInput style={styles.inputStyle} value={wordKorean} onChangeText={onChangeKorean} />
+          <TextInput style={styles.inputStyle} placeholder="단어를 입력하세요" value={wordKorean} onChangeText={onChangeKorean} />
         </View>
       </View>
       <View style={styles.chooseBookshelfView}>
@@ -86,13 +96,16 @@ const CreateWordScreen = () => {
             setSelected={(val) => selectBookshelf(val)}
             data={bookshelfList}
             save="value"
-            defaultOption={{ key: '0', value: 'Default' }}
+            defaultOption={{ key: 'Default', value: 'Default' }}
           />
         </View>
       </View>
       <View style={styles.buttonView}>
-        <Button title="Save" onPress={() => addWord(wordEnglish, wordKorean)} />
-        <Button title="RESET" onPress={() => AsyncStorage.clear()} />
+        <Pressable
+          style={[styles.button, styles.buttonClose]}
+          onPress={() => addWord(wordEnglish, wordKorean)}>
+          <Text style={styles.buttonText}>저장</Text>
+        </Pressable> 
       </View>
     </View>
   );
@@ -147,7 +160,6 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 50,
     fontWeight: 'bold',
-    flex: 1,
   },
   inputTextline: {
     marginRight: 30,
@@ -164,7 +176,7 @@ const styles = StyleSheet.create({
   inputStyle: {
     flex: 1,
     fontSize: 25,
-    color: 'lightgray',
+    color: 'gray',
   },
   enteredView: {
     flex: 1,
@@ -206,6 +218,22 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+  },
+  buttonText: {
+    fontSize: 30,
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  button: {
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    elevation: 2,
+    marginHorizontal: 10
+  },
+  buttonClose: {
+    backgroundColor: 'green',
   },
 });
 

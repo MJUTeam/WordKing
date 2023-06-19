@@ -1,13 +1,14 @@
 import React from 'react';
 import {StyleSheet, View, Text, Button, Pressable} from 'react-native';
 
-const Item = ({bookshelf, onPress}) => {
+const Item = ({bookshelf, onPress, onLongPress}) => {
   //console.log( bookshelf)
   return (
     <View style={styles.container}>
         <View style={styles.block}>
             <Pressable
               onPress={ onPress }
+              onLongPress={ onLongPress }
               style={styles.btn}
             >
                 <Text style={styles.text}>{bookshelf.name}</Text>
