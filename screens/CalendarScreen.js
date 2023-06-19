@@ -1,5 +1,5 @@
-import { Modal, StyleSheet, View } from 'react-native';
-import { GRAY, WHITE } from '../colors';
+import { StyleSheet, Text, View } from 'react-native';
+import { GRAY, PRIMARY, WHITE } from '../colors';
 import MonthCalendarList from '../components/MonthCalendarList';
 import WordList from '../components/WordList';
 import { useState, useEffect, useRef } from 'react';
@@ -39,6 +39,10 @@ const CalendarScreen = ({ navigation }) => {
 
   const jumpToday = (date) => {
     calendarRef.current?.scrollToDay(date, 0, true);
+  };
+
+  const calcMemorizedNum = () => {
+    return words.filter((word) => word.marking === Marking.MEMORIZED).length;
   };
 
   useEffect(() => {
@@ -105,6 +109,13 @@ const CalendarScreen = ({ navigation }) => {
             }
             iconName={hideWord === HideWord.KOREAN ? 'eye-off' : 'eye-outline'}
           />
+          <Text style={styles.progressText}>
+            {words.length > 0
+              ? `진행도 ${calcMemorizedNum()} / ${words.length} (${
+                  (calcMemorizedNum() / words.length) * 100
+                }%)`
+              : null}
+          </Text>
         </View>
         <HR styles={{ line: { borderBottomColor: GRAY.LIGHT } }} />
         <WordList words={words} navigation={navigation} hideWord={hideWord} />
@@ -122,6 +133,13 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flexDirection: 'row-reverse',
+  },
+  progressText: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: 'bold',
+    padding: 7,
+    color: GRAY.DARK,
   },
 });
 
