@@ -1,20 +1,36 @@
 import { StyleSheet, View, Text } from 'react-native';
 import Button from '../components/Button';
-import { getAllItems, getAllKeys, getItemEnglish } from '../util/ItemStorage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';
 
 const SelectQuizScreen = ({ navigation }) => {
   // 단어장 선택하는 View & Button -> map으로 AsyncStorage에 존재하는 모든 wordList 버튼 생성
 
-  const list = [{ name: 'QWER' }, { name: 'ASDF' }];
+  const [wordbooks, setWordbooks] = useState([]);
+
+  useEffect(() => {
+    getWordBooks();
+  }, []);
+
+  const getWordBooks = async () => {
+    AsyncStorage.getAllKeys((err, keys) => {
+      AsyncStorage.multiGet(keys, (err, stores) => {
+        const parsedStores = stores.map(([key, value]) => JSON.parse(value));
+        const bookshelves = parsedStores.filter((item) => !item.isWord);
+
+        setWordbooks(bookshelves);
+      });
+    });
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>단어장 선택</Text>
-      {list.map((string) => (
+      {wordbooks.map((wordbookKey) => (
         <Button
-          key={string.name}
-          title={string.name}
-          onPress={() => navigation.navigate('SelectQuizStart', {})}
+          key={wordbookKey.id}
+          title={wordbookKey.name}
+          onPress={() => navigation.navigate('SelectQuizStart', { name: wordbookKey.name })}
         />
       ))}
       <Button title="뒤로 가기" onPress={() => navigation.goBack()} />
