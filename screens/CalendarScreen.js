@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import HR from '../components/HR';
 import IconButton from '../components/IconButton';
 import WeekCalendarList from '../components/WeekCalendarList';
-import { getAllItemsByDate, getAllItems } from '../utils/ItemStorage';
+import { getAllItemsByDate, getAllWords } from '../utils/ItemStorage';
 import { dateToString } from '../utils/UtilFunc';
 
 const CalendarScreen = ({ navigation }) => {
@@ -22,21 +22,20 @@ const CalendarScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    (async () => {
-      let wordDateArray = await getAllItems();
-      wordDateArray = wordDateArray.map((word) => word.date);
-      let set = new Set(wordDateArray);
+    getAllWords().then((items) => {
+      items = items.filter((word) => word !== undefined).map((word) => word.date);
+      let set = new Set(items);
       wordDateArray = [...set];
       setWordDates(wordDateArray);
-      jumpToday(selected);
-    })();
+    });
+    jumpToday(selected);
   }, [isMonth]);
 
   useEffect(() => {
-    (async () => {
-      const items = await getAllItemsByDate(selected);
+    getAllItemsByDate(selected).then((items) => {
+      items = items.filter((word) => word !== undefined);
       setWords(items);
-    })();
+    });
   }, [selected, isMonth]);
 
   return (

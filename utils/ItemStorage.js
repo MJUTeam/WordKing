@@ -1,10 +1,18 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const getAllKeys = async () => {
-  return await AsyncStorage.getAllKeys();
+export const getAllWords = async () => {
+  const keys = await AsyncStorage.getAllKeys();
+  const promiseItems = keys.map(async (key) => {
+    const jsonValue = await AsyncStorage.getItem(key);
+    const value = JSON.parse(jsonValue);
+    if (value.isWord) {
+      return value;
+    }
+  });
+  return Promise.all(promiseItems);
 };
 
-export const getAllItems = async () => {
+export const getAllItemsByBook = async () => {
   const keys = await getAllKeys();
   const items = [];
   for (const key of keys) {
@@ -16,12 +24,24 @@ export const getAllItems = async () => {
 };
 
 export const getAllItemsByDate = async (date) => {
-  const keys = await getAllKeys();
+  const keys = await AsyncStorage.getAllKeys();
+  const promiseItems = keys.map(async (key) => {
+    const jsonValue = await AsyncStorage.getItem(key);
+    const value = JSON.parse(jsonValue);
+    if (value.isWord && date === value.date) {
+      return value;
+    }
+  });
+  return Promise.all(promiseItems);
+};
+
+export const getAllItemsByBookshelves = async (name) => {
+  const keys = await AsyncStorage.getAllKeys();
   const items = [];
   for (const key of keys) {
     const jsonValue = await AsyncStorage.getItem(key);
     const value = JSON.parse(jsonValue);
-    if (date === value.date) {
+    if (name === value.bookshelf) {
       items.push(value);
     }
   }
