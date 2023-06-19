@@ -1,4 +1,4 @@
-import { StyleSheet, Text, useWindowDimensions, View, Alert } from 'react-native';
+import { StyleSheet,Text, useWindowDimensions, View, Alert, Image,ImageBackground } from 'react-native';
 import SpeedQuizButton,{ ButtonTypes } from '../components/SpeedQuizButton';
 import IconButton from '../components/IconButton';
 import Timer from '../components/Timer';
@@ -23,7 +23,7 @@ const SpeedQuizScreen = ({ navigation, route  }) => {
     try {
       const items = await getAllItemsByBookshelves(name);
       if(!items){
-        Alert.alert("에러","단어장이 비어있습니다.")
+        throw e;
       }
       const randomIndex = Math.floor(Math.random() * items.length);
       const randomItem = items[randomIndex];
@@ -63,54 +63,49 @@ const SpeedQuizScreen = ({ navigation, route  }) => {
 
 return (
   <View style={styles.container} >
-    <View style={styles.goalContainer}>
-    <Text style = {styles.problem} > 문제 </Text>
-    <Text style={ styles.goal }>{meaning} </Text>
-
-    </View>
-
     <View style={styles.pointContainer}>
-      <Text style = { styles.text } >점수 : {point}</Text>
-      <IconButton
+    <IconButton
         size={50}
         onPress={() => {
           navigation.goBack();
         }}
         iconName={'arrow-left-bold-box-outline'}
       />
+    <Image 
+            source={require('../assets/quizkar.png')}
+            style={{ height:'100%' ,width: '10%' }}
+            resizeMode="center"
+          />
+  <Text style = { styles.text } >점수 : {point}</Text>
+    </View>
+    <View style={styles.goalContainer}>
+
+    <Image 
+            source={require('../assets/crown.png')}
+            style={{ height:'100%' ,width: '10%' }}
+            resizeMode="center"
+          />
+    <Text style={ styles.goal }>{meaning} </Text>
+
     </View>
 
     <View style={styles.resultContainer}>
-      
+
       <Text style = { styles.text } > {result} </Text>
-      
     </View>
     <Timer timeLimit={100} onTimeUp={handleTimeUp} />
-    <View style={styles.buttonContainer}>
-      <View style={styles.leftPad}>
-        
-        <View style={styles.number}>
-          {
-          shuffleArray(letters.slice(0, maxLength+1)).map((alpha, index) =>(          
-            <SpeedQuizButton 
-            key={alpha+index}
-            title={alpha.toString()}
-            onPress={()=>{setResult((result)=>{ return result+alpha;});}}
-            buttonStyle={{width,height:width, marginBottom:1}}
-            />
-          ))}
-
-        </View>
-        <View style={styles.bottom}>
-          
-        </View>
-      </View>
-      <View>
+    <View style={styles.buttonContainer}> 
+    <ImageBackground 
+            source={require('../assets/quiz.png')}
+            style={{ width: '100%' }}
+            resizeMode="cover"
+          >
+      <View style={styles.number}>
         <SpeedQuizButton title="삭제"
         onPress={()=>{
           setResult((result)=>{ return "";});
         }}
-        buttonStyle={{width,height:width, marginTop:1}}
+        buttonStyle={{width:width*2,height:width, marginTop:1}}
         buttonTypes={ButtonTypes.OPERATOR}
         />   
         <SpeedQuizButton title="정답"
@@ -122,9 +117,33 @@ return (
             setResult((result)=>{ return "";});           
         }}
             buttonTypes={ButtonTypes.OPERATOR}
-            buttonStyle={{width,height:width, marginBottom:1}}
+            buttonStyle={{width:width*2,height:width,marginBottom:1}}
           />       
       </View>
+      </ImageBackground>      
+      <View>
+      <ImageBackground 
+            source={require('../assets/quiz.png')}
+            style={{ width: '100%' }}
+            resizeMode="cover"
+          >
+            <View style={styles.number}>
+          {shuffleArray(letters.slice(0, maxLength+1)).map((alpha, index) =>(          
+            <SpeedQuizButton 
+            key={alpha+index}
+            title={alpha.toString()}
+            onPress={()=>{setResult((result)=>{ return result+alpha;});}}
+            buttonStyle={{width,height:width, marginBottom:1}}
+            />
+          ))}
+         </View>
+           </ImageBackground>
+        </View>
+        <Image
+            source={require('../assets/quiz.png')}
+            style={{ width: '100%' ,height: '50%' }}
+            resizeMode="cover"
+          />
     </View>
   </View>
 );
@@ -142,12 +161,12 @@ pointContainer: {
   flex: 0.1,
   flexDirection:'row',
   alignItems: 'space-between',
+  paddingTop:20,
 },
 goalContainer: {
   flex: 0.2,
   justifyContent: 'center',
   alignItems: 'center',
-  paddingTop:20,
 },
 
 problem:{
@@ -156,13 +175,12 @@ problem:{
   backgroundColor:'#000000',
 },
 goal:{
-  fontSize:60,
+  fontSize:40,
   fontWeight:'700',
   color: '#000000',
-  paddingBottom : 30,
 },
 resultContainer: {
-  flex: 0.2,
+  flex: 0.3,
   justifyContent: 'flex-end',
   alignItems: 'flex-end',
 },
@@ -175,19 +193,10 @@ text:{
 },
 buttonContainer:{
   flex: 0.5,
-  backgroundColor:'#000000',
-  flexDirection:"row",
-  justifyContent:'space-evenly',
-},
-leftPad:{
-  width:'75%',
+
 },
 number:{
   flexWrap:'wrap-reverse',
-  flexDirection:"row",
-  justifyContent:'space-evenly',
-},
-bottom:{    
   flexDirection:"row",
   justifyContent:'space-evenly',
 },

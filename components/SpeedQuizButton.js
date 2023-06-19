@@ -8,11 +8,11 @@ const SpeedQuizButton = ({ title, onPress, buttonStyle,buttonTypes }) =>{
         style={({pressed})=>[
             styles.button,{
                 backgroundColor:
-                    buttonTypes===ButtonTypes.NUMBER?GRAY.DEFAULT:Orange.DEFAULT,
+                    buttonTypes===ButtonTypes.NUMBER?Orange.DEFAULT:GRAY.DEFAULT,
             },
             pressed && {
                 backgroundColor:
-                buttonTypes===ButtonTypes.NUMBER?GRAY.DARK:Orange.DARK,},
+                buttonTypes===ButtonTypes.NUMBER?Orange.DARK:GRAY.DARK,},
             buttonStyle,
         ]}
         onPressOut={onPress}
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     button:{
         justifyContent:'center',
         alignItems: 'center',
-        borderWidth:1,
+        borderWidth:7,
     },  
     title:{
         color:'#ffffff',
