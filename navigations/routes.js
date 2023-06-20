@@ -8,6 +8,7 @@ export const ContentRoutes = {
   Setting: { name: 'Setting', label: '설정' },
   Quiz: { name: 'Quiz', label: '퀴즈' },
   SelectQuiz: { name: 'SelectQuiz', label: '사지선다' },
+  SelectQuizStart: { name: 'SelectQuizStart', label: '사지선다 시작' },
   MeanQuiz: { name: 'MeanQuiz', label: '의미 맞추기' },
   WordQuiz: { name: 'WordQuiz', label: '단어 맞추기' },
   SpeedQuiz: { name: 'SpeedQuiz', label: '스피드 퀴즈' },
