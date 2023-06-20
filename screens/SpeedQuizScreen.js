@@ -30,18 +30,25 @@ const SpeedQuizScreen = ({ navigation, route }) => {
   const getWord = async () => {
     try {
       const items = await getAllItemsByBookshelves(name);
-      if (!items) {
-        throw e;
+      const filteredItems = items.filter(item => item !== undefined);
+      if(filteredItems.length<4){
+        handleNoWord();
+      }else{
+        const randomIndex = Math.floor(Math.random() * filteredItems.length);
+        const randomItem = filteredItems[randomIndex];
+          if(randomItem.english===spelling){
+            getWord();  
+          }else{
+            setSpelling(randomItem.english);
+            setMeaning(randomItem.korean);
+            setLetters((letters) => {
+              return randomItem.english.split('');
+            });
+          }
       }
-      const randomIndex = Math.floor(Math.random() * items.length);
-      const randomItem = items[randomIndex];
-      setSpelling(randomItem.english);
-      setMeaning(randomItem.korean);
-      setLetters((letters) => {
-        return randomItem.english.split('');
-      });
+
     } catch (error) {
-      console.log(error);
+      getWord();
     }
   };
 
@@ -59,6 +66,15 @@ const SpeedQuizScreen = ({ navigation, route }) => {
     }
     return shuffledArray;
   }
+
+  const handleNoWord = () => {
+    Alert.alert(
+      '오류',
+      '단어가 4개 이상 필요합니다.',
+      [{ text: '확인', onPress: () => navigation.goBack() }],
+      { cancelable: false }
+    );
+  };
 
   const handleTimeUp = () => {
     Alert.alert(

@@ -212,47 +212,6 @@ const BookShelfScreen = () => {
           </View>
         </View>
       </Modal>
-
-      { /* 단어장 이름 수정 모달 */ }
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modifyModalVisible}
-        onRequestClose={() => {
-          setModifyModalVisible(!modifyModalVisible);
-        }}>
-        
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={styles.modifyTitle}>
-              <Text style={styles.modifyTitleText}> 단어장 이름 수정 </Text>
-            </View>
-            <View style={styles.modifyContent}>
-              <Text style={styles.modifyContentText}> 새로운 이름: </Text>
-              <View style={styles.modifyContentInputView}>
-                <TextInput
-                  style={styles.modifyContentInput}
-                  value={tempBookshelfName}
-                  placeholder={tempBookshelfName}
-                  onChangeText={setTempBookshelfName}
-                />
-              </View>
-            </View>
-            <View style={styles.modifyButton}>
-              <Pressable
-                  style={[styles.button, styles.modifyModalButton]}
-                  onPress={() => modifyText()}>
-                  <Text style={styles.textStyle}>확인</Text>
-                </Pressable>
-                <Pressable
-                  style={[styles.button, styles.modifyModalButton]}
-                  onPress={() => setModifyModalVisible(!modifyModalVisible)}>
-                  <Text style={styles.textStyle}>취소</Text>
-                </Pressable>
-            </View>
-          </View>
-        </View>
-      </Modal>
       
       { /* 단어장 단어 목록 모달 */ }
       <Modal
@@ -276,6 +235,9 @@ const BookShelfScreen = () => {
                     <View style={styles.wordListView}>
                       <View style={styles.koreanView}>
                         <Text style={styles.wordItem}> {item.korean} </Text>
+                      </View>
+                      <View style={styles.classView}>
+                        <Text style={styles.wordClassItem}> {item.class} </Text>
                       </View>
                       <View style={styles.englishView}>
                         <Text style={styles.wordItem}> {item.english} </Text>
@@ -518,6 +480,16 @@ const styles = StyleSheet.create({
   },
   englishView: {
     
+  },
+  classView: {
+    
+  },
+  wordClassItem: {
+    color: 'gray',
+    margin: 10,
+    marginRight: 30,
+    marginLeft: 5,
+    fontSize: 20
   }
 });
 
