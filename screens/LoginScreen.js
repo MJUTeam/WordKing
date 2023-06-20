@@ -10,7 +10,7 @@ import SafeInputView from '../components/SafeInputView';
 import { useNavigation } from '@react-navigation/native';
 import { ContentRoutes } from '../navigations/routes';
 import { useState, useRef } from 'react';
-import Button from '../components/Button';
+import LoginButton from '../components/LoginButton';
 import HR from '../components/HR';
 
 const LoginScreen = () => {
@@ -72,7 +72,7 @@ const LoginScreen = () => {
           />
         </View>
         <View style={[styles.form, { paddingTop: bottom }]}>
-          <Text>Login</Text>
+          <Text></Text>
           <Input
             style={styles.input}
             inputType={InputTypes.EMAIL}
@@ -91,19 +91,19 @@ const LoginScreen = () => {
             placeholder="Password"
             secureTextEntry={true}
           />
-          <Button
-            title="Login"
+          <Text></Text>
+          <LoginButton
+            title=" Login "
             onPress={handleLogin}
             styles={{
               container: {
                 paddingHoriaontal: 20,
-                marginTop: 20,
               },
             }}
           />
           <HR text={'OR'} styles={{ container: { marginVertical: 30 } }} />
-          <Button
-            title="회원가입"
+          <LoginButton
+            title=" Sign In "
             onPress={aaa}
             styles={{
               container: {

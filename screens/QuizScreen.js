@@ -33,7 +33,9 @@ const QuizScreen = ({ navigation }) => {
       <IconTitleButton
         title={ContentRoutes.SpeedQuiz.label}
         size={40}
-        onPress={() => navigation.navigate('SelectSpeedQuiz')}
+        onPress={() =>
+          navigation.navigate('BookShelfSelect', { quizType: ContentRoutes.SpeedQuiz.name })
+        }
         iconName={'timer-outline'}
       />
     </View>

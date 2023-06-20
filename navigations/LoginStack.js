@@ -19,7 +19,6 @@ const LoginStack = () => {
       >      
         <Stack.Screen name={ContentRoutes.Login.name} component={LoginScreen}/>
         <Stack.Screen name={ContentRoutes.Main.name} component={Navigation}/>
-        <Stack.Screen name={ContentRoutes.Setting.name} component={SettingScreen}/>
     </Stack.Navigator>
     );
 };

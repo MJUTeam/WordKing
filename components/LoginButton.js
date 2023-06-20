@@ -1,12 +1,12 @@
 import { Text, Pressable, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
-const Button = ({ title, onPress, buttonStyle }) => {
+const LoginButton = ({ title, onPress, buttonStyle }) => {
   return (
     <Pressable
       style={({ pressed }) => [
         styles.button,
-        pressed && { backgroundColor: '#3f3f46' },
+        pressed && { backgroundColor: '#b45309' },
         buttonStyle,
       ]}
       onPressOut={onPress}
@@ -15,7 +15,7 @@ const Button = ({ title, onPress, buttonStyle }) => {
     </Pressable>
   );
 };
-Button.propTypes = {
+LoginButton.propTypes = {
   title: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired,
   buttonStyle: PropTypes.object,
@@ -24,12 +24,12 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#71717a',
-    marginBottom: 10,
+    backgroundColor: '#f59e0b',
+    borderRadius: 20,
   },
   title: {
     color: '#ffffff',
     fontSize: 50,
   },
 });
-export default Button;
+export default LoginButton;
