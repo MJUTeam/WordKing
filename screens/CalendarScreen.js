@@ -111,9 +111,9 @@ const CalendarScreen = ({ navigation }) => {
           />
           <Text style={styles.progressText}>
             {words.length > 0
-              ? `진행도 ${calcMemorizedNum()} / ${words.length} (${
+              ? `진행도 ${calcMemorizedNum()} / ${words.length} (${Math.ceil(
                   (calcMemorizedNum() / words.length) * 100
-                }%)`
+                )}%)`
               : null}
           </Text>
         </View>
@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     flex: 1,
     backgroundColor: WHITE,
+    paddingTop: 10,
   },
   buttons: {
     flexDirection: 'row-reverse',
