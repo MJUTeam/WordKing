@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import IconButton from '../components/IconButton';
 import IconTitleButton from '../components/IconTitleButton';
 import { getAllItemsByBookshelves } from '../utils/ItemStorage';
+import { BLACK, WHITE } from '../colors';
 
 const MeanQuizScreen = ({ route, navigation }) => {
   const [answer, setAnswer] = useState('');
@@ -14,19 +15,39 @@ const MeanQuizScreen = ({ route, navigation }) => {
   const [gameState, setGameState] = useState(false);
   const [total, setTotal] = useState(0);
   const [initState, setInitState] = useState(true);
+  const [feedback, setFeedback] = useState([]);
 
   const GameOver = () => {
     if (gameState) {
-      Alert.alert(
-        '결과',
-        '정답률:' + Math.ceil((score / total) * 100, '%'),
-        [{ text: '확인', onPress: () => navigation.goBack() }],
-        {
-          cancelable: false,
-        }
-      );
+      if (total == score) {
+        Alert.alert(
+          '결과',
+          '정답률:' + Math.ceil((score / total) * 100) + '%',
+          [{ text: '확인', onPress: () => navigation.goBack() }],
+          {
+            cancelable: false,
+          }
+        );
+      } else {
+        Alert.alert(
+          '결과',
+          '정답률:' + Math.ceil((score / total) * 100) + '% \n' + '틀린 문제 \n' + makeFeedBack(),
+          [{ text: '확인', onPress: () => navigation.goBack() }],
+          {
+            cancelable: false,
+          }
+        );
+      }
     }
   };
+  function makeFeedBack() {
+    feed = '';
+    for (i = 0; i < feedback.length; i++) {
+      feed = feed + '단어: ' + feedback[i][0] + ' / 의미: ' + feedback[i][0] + '\n';
+    }
+    console.log(feed);
+    return feed;
+  }
 
   useEffect(() => {
     getWord();
@@ -37,8 +58,15 @@ const MeanQuizScreen = ({ route, navigation }) => {
       var items = [];
       if (initState) {
         items = await getAllItemsByBookshelves(route.params.name);
-        if (!items) {
-          Alert.alert('에러', '단어장이 비어있습니다.');
+        if (items.length == 0) {
+          Alert.alert(
+            '경고',
+            '단어가 존재하지 않습니다',
+            [{ text: '확인', onPress: () => navigation.goBack() }],
+            {
+              cancelable: false,
+            }
+          );
         }
         const randomIndex = Math.floor(Math.random() * items.length);
         const randomItem = items[randomIndex];
@@ -69,13 +97,14 @@ const MeanQuizScreen = ({ route, navigation }) => {
       });
       return true;
     } else {
+      feedback.push([spelling, meaning]);
+      setFeedback(feedback);
       return false;
     }
   }
   return (
     <Pressable style={styles.container} onPress={() => Keyboard.dismiss()}>
       <GameOver />
-      <Text>{score}</Text>
       <IconButton
         size={50}
         onPress={() => {
@@ -83,10 +112,14 @@ const MeanQuizScreen = ({ route, navigation }) => {
         }}
         iconName={'arrow-left-bold-box-outline'}
       />
-      <Text>MeanQuizScreen</Text>
-      <Text>{spelling}</Text>
+      <Text style={styles.title}>의미 맞추기</Text>
+      <Text style={styles.text}>{spelling}</Text>
       <View>
-        <TextInput placeholder="답을 입력하세요" onChangeText={(text) => setAnswer(text.trim())} />
+        <TextInput
+          style={styles.textInput}
+          placeholder="답을 입력하세요"
+          onChangeText={(text) => setAnswer(text.trim())}
+        />
         <IconTitleButton
           title="확인"
           onPress={() => {
@@ -111,10 +144,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   textInput: {
-    borderBottomWidth: 1,
-    borderRadius: 8,
-    height: 42,
-    paddingHorizontal: 10,
+    margin: 15,
+    height: 50,
+    borderColor: BLACK,
+    borderWidth: 3,
+    borderRadius: 45,
+    width: 250,
+    padding: 10,
+    fontSize: 18,
+  },
+  title: {
+    fontSize: 50,
+  },
+  text: {
+    fontSize: 40,
   },
 });
 

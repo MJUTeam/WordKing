@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StyleSheet, View, Text, TextInput, Button, FlatList, Modal, Pressable } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Button, FlatList, Modal, Pressable, Alert } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Item from '../src/Item';
 
@@ -27,12 +27,24 @@ JSON File Convention
 const BookShelfScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [bookshelfModalVisible, setBookshelfModalVisible] = useState( false );
-  const [bookshelfName, setBookshelfName] = useState("단어장 이름");
+  const [modifyModalVisible, setModifyModalVisible] = useState( false );
+  const [bookshelfName, setBookshelfName] = useState("");
   const [bookshelfList, setBookshelfList] = useState([]);
   const [wordList, setWordList] = useState([]);
   const [selectedID, setSelectedID] = useState("0");
   const [tempList, setTempList] = useState();
   const [selectedBookshelf, setSelectedBookshelf] = useState("");
+  const [tempBookshelfName, setTempBookshelfName] = useState("");
+  const [modifyedBookshelfID, setModifyedBookshelfID] = useState();
+
+  const deleteBookshelfAlert = () => 
+    Alert.alert('단어장 삭제', '삭제가 완료되었습니다', [
+    {
+      text: '확인',
+      onPress: () => console.log('OnPress'),
+      style: 'cancel',
+    },
+  ]);
 
   JSONList = [];
   useEffect(() => {
@@ -118,17 +130,57 @@ const BookShelfScreen = () => {
 
   function deleteBookshelf(){
     console.log( selectedID );
-    AsyncStorage.removeItem( selectedID );
+    if( selectedID == 0 ){
+      console.log( "Default 단어장은 삭제할 수 없습니다.");
+    }
+    else {
+      AsyncStorage.removeItem( selectedID );
+      deleteBookshelfAlert();
+    }
     getBookshelf();
     setBookshelfModalVisible( !bookshelfModalVisible );
   }
 
-  function modifyBookshelf( id ){
-    
+  function modifyBookshelf( item ){
+    /*
+    if( item.id == 0 ){
+      console.log( "기본 단어장은 수정할 수 없습니다" );
+    } else {
+      setModifyedBookshelfID( item.id );
+      setTempBookshelfName( item.name );
+      setModifyModalVisible(!modifyModalVisible);
+    } 
+    */
+  }
+
+  function modifyText(){
+    /*
+    AsyncStorage.getItem( modifyedBookshelfID )
+      .then(value => {
+        const info = JSON.parse(value);
+        console.log( info );
+
+        AsyncStorage.removeItem( info.id );
+        const newBookshelf = {
+          id: info.id,
+          name: tempBookshelfName,
+          isWord: false
+        };
+        
+        AsyncStorage.setItem(info.id, JSON.stringify(newBookshelf))
+          .then(() => {
+            setBookshelfList(prevList => [...prevList, newBookshelf]);
+            console.log("MODIFY");
+          })
+          .catch(error => console.log(error));
+      })
+      .catch(error => console.log(error));
+      */
   }
 
   return (
     <View style={styles.container}>
+      { /* 단어장 추가 모달 */ }
       <Modal
         animationType="slide"
         transparent={true}
@@ -136,7 +188,6 @@ const BookShelfScreen = () => {
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}>
-        
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View>
@@ -144,7 +195,7 @@ const BookShelfScreen = () => {
             </View>
             <View style={styles.inputNameView}>
               <Text style={styles.nameText}> 이름: </Text>
-              <TextInput style={styles.nameTextInput} value={bookshelfName} onChangeText={setBookshelfName} />
+              <TextInput style={styles.nameTextInput} placeholder="단어장 이름" value={bookshelfName} onChangeText={setBookshelfName} />
             </View>
             <View style={styles.modalButton}>
               <Pressable
@@ -161,7 +212,49 @@ const BookShelfScreen = () => {
           </View>
         </View>
       </Modal>
+
+      { /* 단어장 이름 수정 모달 */ }
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modifyModalVisible}
+        onRequestClose={() => {
+          setModifyModalVisible(!modifyModalVisible);
+        }}>
+        
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={styles.modifyTitle}>
+              <Text style={styles.modifyTitleText}> 단어장 이름 수정 </Text>
+            </View>
+            <View style={styles.modifyContent}>
+              <Text style={styles.modifyContentText}> 새로운 이름: </Text>
+              <View style={styles.modifyContentInputView}>
+                <TextInput
+                  style={styles.modifyContentInput}
+                  value={tempBookshelfName}
+                  placeholder={tempBookshelfName}
+                  onChangeText={setTempBookshelfName}
+                />
+              </View>
+            </View>
+            <View style={styles.modifyButton}>
+              <Pressable
+                  style={[styles.button, styles.modifyModalButton]}
+                  onPress={() => modifyText()}>
+                  <Text style={styles.textStyle}>확인</Text>
+                </Pressable>
+                <Pressable
+                  style={[styles.button, styles.modifyModalButton]}
+                  onPress={() => setModifyModalVisible(!modifyModalVisible)}>
+                  <Text style={styles.textStyle}>취소</Text>
+                </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
       
+      { /* 단어장 단어 목록 모달 */ }
       <Modal
         animationType="slide"
         transparent={true}
@@ -178,15 +271,20 @@ const BookShelfScreen = () => {
             <View style={styles.bookshelfModalContent}>
               <FlatList 
                 data={ tempList }
-                renderItem={ ({item}) => <Text style={styles.wordItem}> {item.korean} {item.english} </Text>}
+                renderItem={ 
+                  ({item}) => 
+                    <View style={styles.wordListView}>
+                      <View style={styles.koreanView}>
+                        <Text style={styles.wordItem}> {item.korean} </Text>
+                      </View>
+                      <View style={styles.englishView}>
+                        <Text style={styles.wordItem}> {item.english} </Text>
+                      </View>
+                    </View>
+                }
               />
             </View>
             <View style={styles.bookshelfModalButton}>
-              <Pressable
-                  style={[styles.button, styles.buttonModify]}
-                  onPress={() => modifyBookshelf()}>
-                  <Text style={styles.textStyle}>수정</Text>
-                </Pressable>
                 <Pressable
                   style={[styles.button, styles.buttonDelete]}
                   onPress={() => deleteBookshelf()}>
@@ -209,18 +307,15 @@ const BookShelfScreen = () => {
         <FlatList
           keyExtractor={item => item.id}
           data={bookshelfList}
-          renderItem={({item}) => <Item bookshelf={item} onPress={() => clickBookshelf(item)} />}
+          renderItem={({item}) => <Item bookshelf={item} onLongPress={() => modifyBookshelf(item)} onPress={() => clickBookshelf(item)} />}
         />
       </View>
       <View style={styles.buttonView}>
-        <Button
-          title="단어장 추가"
-          onPress={ () => setModalVisible(true) }
-        />
-        <Button 
-          title="DB"
-          onPress={ () => deb() }
-        />
+      <Pressable
+          style={[styles.button, styles.buttonAdd]}
+          onPress={() => setModalVisible(true) }>
+          <Text style={styles.textStyle}>단어장 추가</Text>
+        </Pressable>  
       </View>
     </View>
   );
@@ -353,7 +448,7 @@ const styles = StyleSheet.create({
   },
   nameTextInput: {
     fontSize: 20,
-    color: "lightgray"
+    color: "gray"
   },
   bookshelfModalTitle: {
     height: "10%",
@@ -378,6 +473,51 @@ const styles = StyleSheet.create({
   wordItem: {
     margin: 10,
     fontSize: 20
+  },
+  modifyContentInput: {
+    color: 'gray',
+    fontSize: 20
+  },
+  modifyContentText: {
+    fontSize: 20
+  },
+  modifyTitleText: {
+    fontSize: 30,
+    fontWeight: 'bold'
+  },
+  modifyContent: {
+    flexDirection: 'row',
+    margin: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  modifyContentInputView: {
+    width: "50%"
+  },
+  modifyButton: {
+    flexDirection: "row",
+    margin: 5
+  },
+  modifyModalButton: {
+    backgroundColor: "blue"
+  },
+  modifyTitle: {
+    margin: 10
+  },
+  buttonAdd: {
+    backgroundColor: "blue",
+    paddingHorizontal: 20,
+    paddingVertical: 10
+  },
+  wordListView: {
+    flexDirection: 'row',
+    width: "100%"
+  },
+  koreanView: {
+    
+  },
+  englishView: {
+    
   }
 });
 
