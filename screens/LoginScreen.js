@@ -28,11 +28,6 @@ const LoginScreen = () => {
     setPassword(text);
   };
 
-  const aaa = () => {
-    navigation.replace(ContentRoutes.Main.name);
-
-  };
-
   const handleSignUp = async () => {
     try {
       const createdUser = await createUserWithEmailAndPassword(firebaseAuth, email, password);
@@ -104,7 +99,7 @@ const LoginScreen = () => {
           <HR text={'OR'} styles={{ container: { marginVertical: 30 } }} />
           <LoginButton
             title=" Sign In "
-            onPress={aaa}
+            onPress={handleSignUp}
             styles={{
               container: {
                 paddingHoriaontal: 20,
