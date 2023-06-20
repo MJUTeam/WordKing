@@ -8,8 +8,10 @@ import { dateToString } from '../utils/UtilFunc';
 const CreateWordScreen = () => {
   const [wordEnglish, onChangeEnglish] = useState('');
   const [wordKorean, onChangeKorean] = useState('');
+  const [wordClass, onChangeClass] = useState('');
   const [selectedBookshelf, selectBookshelf] = useState('0');
   const [bookshelfList, setBookshelfList] = useState([]);
+  const [wordList, setWordList] = useState([]);
   const [, setState] = useState();
 
   useEffect(() => {
@@ -17,6 +19,8 @@ const CreateWordScreen = () => {
       AsyncStorage.multiGet(keys, (err, stores) => {
         const parsedStores = stores.map(([key, value]) => JSON.parse(value));
         const bookshelves = parsedStores.filter((item) => !item.isWord);
+        const words = parsedStores.filter( (item) => item.isWord );
+        setWordList( words );
 
         const bookshelfNames = bookshelves.map((item) => ({ id: item.id, value: item.name }));
         setBookshelfList(bookshelfNames);
@@ -36,9 +40,25 @@ const CreateWordScreen = () => {
       style: 'cancel',
     },
   ]);
+
+  const duplicateAlert = () =>
+  Alert.alert('단어 중복', '이미 단어가 존재합니다.', [
+    {
+      text: '확인',
+      onPress: () => console.log('확인'),
+      style: 'cancel',
+    },
+  ]);
   
-  function addWord(english, korean) {
-    console.log(selectedBookshelf);
+  function addWord(english, korean, wordClass ) {
+    console.log(wordList);
+    for( let i = 0; i < wordList.length; i++ ){
+      if( wordList[i].english == english ){
+        duplicateAlert();
+        return;
+      }
+    }
+    
     AsyncStorage.setItem(
       english,
       JSON.stringify({
@@ -49,6 +69,7 @@ const CreateWordScreen = () => {
         marking: Marking.NONE.toString(),
         date: dateToString(new Date()),
         isWord: true,
+        class: wordClass,
       })
     );
     console.log('IN');
@@ -89,6 +110,12 @@ const CreateWordScreen = () => {
           <TextInput style={styles.inputStyle} placeholder="단어를 입력하세요" value={wordKorean} onChangeText={onChangeKorean} />
         </View>
       </View>
+      <View style={styles.inputClassView}>
+        <Text style={styles.checkText}> 품사: </Text>
+        <View style={styles.inputTextline}>
+          <TextInput style={styles.inputStyle} placeholder="품사를 입력하세요" value={wordClass} onChangeText={onChangeClass} />
+        </View>
+      </View>
       <View style={styles.chooseBookshelfView}>
         <Text style={styles.checkText}> 단어장: </Text>
         <View style={styles.selectListContainer}>
@@ -103,7 +130,7 @@ const CreateWordScreen = () => {
       <View style={styles.buttonView}>
         <Pressable
           style={[styles.button, styles.buttonClose]}
-          onPress={() => addWord(wordEnglish, wordKorean)}>
+          onPress={() => addWord(wordEnglish, wordKorean, wordClass)}>
           <Text style={styles.buttonText}>저장</Text>
         </Pressable> 
       </View>
@@ -133,6 +160,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputKoreanView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 15,
+    marginHorizontal: 30,
+    flex: 1,
+  },
+  inputClassView: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
