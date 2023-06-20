@@ -69,7 +69,7 @@ const SpeedQuizScreen = ({ navigation, route }) => {
 
   const handleNoWord = () => {
     Alert.alert(
-      '결과',
+      '오류',
       '단어가 4개 이상 필요합니다.',
       [{ text: '확인', onPress: () => navigation.goBack() }],
       { cancelable: false }
