@@ -112,7 +112,7 @@ const WordQuizScreen = ({ route, navigation }) => {
         }}
         iconName={'arrow-left-bold-box-outline'}
       />
-      <Text style={styles.title}>의미 맞추기</Text>
+      <Text style={styles.title}>단어 맞추기</Text>
       <Text style={styles.text}>{meaning}</Text>
       <View>
         <TextInput
