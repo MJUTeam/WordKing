@@ -47,6 +47,19 @@ export const getAllItemsByBookshelves = async (name) => {
   return Promise.all(allItems);
 };
 
+export const getAllItemsByBookshelvesh = async (name) => {
+  const keys = await AsyncStorage.getAllKeys();
+  const items = [];
+  for (const key of keys) {
+    const jsonValue = await AsyncStorage.getItem(key);
+    const value = JSON.parse(jsonValue);
+    if (name === value.bookshelf) {
+      items.push(value);
+    }
+  }
+  return items;
+};
+
 export const setItem = async (word) => {
   AsyncStorage.setItem(word.id, JSON.stringify(word));
 };

@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, TextInput, Keyboard, Pressable, Alert } from 'r
 import { useEffect, useState } from 'react';
 import IconButton from '../components/IconButton';
 import IconTitleButton from '../components/IconTitleButton';
-import { getAllItemsByBookshelves } from '../utils/ItemStorage';
+import { getAllItemsByBookshelvesh } from '../utils/ItemStorage';
 import { BLACK, WHITE } from '../colors';
 
 const WordQuizScreen = ({ route, navigation }) => {
@@ -57,7 +57,7 @@ const WordQuizScreen = ({ route, navigation }) => {
     try {
       var items = [];
       if (initState) {
-        items = await getAllItemsByBookshelves(route.params.name);
+        items = await getAllItemsByBookshelvesh(route.params.name);
         if (items.length == 0) {
           Alert.alert(
             '경고',
