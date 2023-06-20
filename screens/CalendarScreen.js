@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { GRAY, PRIMARY, WHITE } from '../colors';
+import { GRAY, WHITE } from '../colors';
 import MonthCalendarList from '../components/MonthCalendarList';
 import WordList from '../components/WordList';
 import { useState, useEffect, useRef } from 'react';
@@ -136,10 +136,10 @@ const styles = StyleSheet.create({
   },
   progressText: {
     flex: 1,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
-    padding: 7,
-    color: GRAY.DARK,
+    padding: 9,
+    color: GRAY.DEFAULT,
   },
 });
 

@@ -12,7 +12,7 @@ const WordDetailScreen = ({ route, navigation }) => {
   const { words, id } = route.params;
   const [index, setIndex] = useState(0);
   const [marking, setMarking] = useState('');
-  const [hideKorean, setHideKorean] = useState(false);
+  const [hideKorean, setHideKorean] = useState(true);
 
   useEffect(() => {
     for (let i = 0; i < words.length; i++) {
@@ -65,6 +65,7 @@ const WordDetailScreen = ({ route, navigation }) => {
         <IconButton
           onPress={() => {
             setIndex(index - 1);
+            setHideKorean(true);
           }}
           iconName={'chevron-left'}
           size={25}
@@ -83,6 +84,7 @@ const WordDetailScreen = ({ route, navigation }) => {
         <IconButton
           onPress={() => {
             setIndex(index + 1);
+            setHideKorean(true);
           }}
           iconName={'chevron-right'}
           size={25}

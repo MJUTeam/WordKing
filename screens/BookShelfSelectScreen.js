@@ -1,7 +1,8 @@
 import { StyleSheet, View, Text } from 'react-native';
-import Button from '../components/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
+import IconTitleButton from '../components/IconTitleButton';
+import IconButton from '../components/IconButton';
 
 const BookShelfSelectScreen = ({ route, navigation }) => {
   const [wordbooks, setWordbooks] = useState([]);
@@ -23,15 +24,23 @@ const BookShelfSelectScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
+      <IconButton
+        size={50}
+        onPress={() => {
+          navigation.goBack();
+        }}
+        iconName={'arrow-left-bold-box-outline'}
+      />
       <Text style={styles.title}>단어장 선택</Text>
       {wordbooks.map((wordbookKey) => (
-        <Button
+        <IconTitleButton
+          size={50}
           key={wordbookKey.id}
           title={wordbookKey.name}
           onPress={() => navigation.navigate(route.params.quizType, { name: wordbookKey.name })}
+          iconName={'numeric-' + (wordbooks.indexOf(wordbookKey) + 1) + '-circle-outline'}
         />
       ))}
-      <Button title="뒤로 가기" onPress={() => navigation.goBack()} />
     </View>
   );
 };
