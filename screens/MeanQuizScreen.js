@@ -43,9 +43,8 @@ const MeanQuizScreen = ({ route, navigation }) => {
   function makeFeedBack() {
     feed = '';
     for (i = 0; i < feedback.length; i++) {
-      feed = feed + '단어: ' + feedback[i][0] + ' / 의미: ' + feedback[i][0] + '\n';
+      feed = feed + '단어: ' + feedback[i][0] + ' / 의미: ' + feedback[i][1] + '\n';
     }
-    console.log(feed);
     return feed;
   }
 

@@ -5,7 +5,6 @@ import IconTitleButton from '../components/IconTitleButton';
 const QuizScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text>QuizScreen</Text>
       <IconTitleButton
         title={ContentRoutes.SelectQuiz.label}
         size={40}
